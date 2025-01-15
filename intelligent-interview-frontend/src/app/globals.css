@@ -1,0 +1,19 @@
+/* 设置全局页面布局 */
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+html,
+body {
+  max-width: 100vw;
+  max-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* 限制页面最大的宽度 */
+.max-width-content {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+}
