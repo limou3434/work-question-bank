@@ -33,7 +33,7 @@ export default async function FirstQuestionPage({ params }) {
     bank = res.data;
   } catch (e) {
     // @ts-ignore
-    message.error("获取题库失败: " + e.message);
+    console.error("获取题库失败: " + e.message);
   }
 
   // 如果题库不存在
@@ -51,7 +51,7 @@ export default async function FirstQuestionPage({ params }) {
     question = res.data;
   } catch (e) {
     // @ts-ignore
-    message.error("获取题目失败: " + e.message);
+    console.error("获取题目失败: " + e.message);
   }
 
   // 如果首题不存在

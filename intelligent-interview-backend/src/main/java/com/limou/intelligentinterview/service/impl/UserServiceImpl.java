@@ -2,6 +2,7 @@ package com.limou.intelligentinterview.service.impl;
 
 import static com.limou.intelligentinterview.constant.UserConstant.USER_LOGIN_STATE;
 
+import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -15,6 +16,7 @@ import com.limou.intelligentinterview.model.entity.User;
 import com.limou.intelligentinterview.model.enums.UserRoleEnum;
 import com.limou.intelligentinterview.model.vo.LoginUserVO;
 import com.limou.intelligentinterview.model.vo.UserVO;
+import com.limou.intelligentinterview.satoken.DeviceUtils;
 import com.limou.intelligentinterview.service.UserService;
 import com.limou.intelligentinterview.utils.SqlUtils;
 
@@ -27,6 +29,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.bean.WxOAuth2UserInfo;
+import org.apache.commons.collections4.functors.NOPTransformer;
 import org.apache.commons.lang3.StringUtils;
 import org.redisson.api.RBitSet;
 import org.redisson.api.RedissonClient;
@@ -115,8 +118,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "用户不存在或密码错误");
         }
         // 3. 记录用户的登录态
-        request.getSession().setAttribute(USER_LOGIN_STATE, user);
+        // request.getSession().setAttribute(USER_LOGIN_STATE, user);
+        // return this.getLoginUserVO(user);
+
+        // 4.修改为使用 sa-token 来实现登陆(有些不太懂)
+        StpUtil.login(user.getId(), DeviceUtils.getRequestDevice(request));
+        StpUtil.getSession().set(USER_LOGIN_STATE, user);
+
         return this.getLoginUserVO(user);
+        // TODO: 修改模板的登陆接口为使用 sa-token
     }
 
     @Override
@@ -152,13 +162,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     /**
-     * 获取当前登录用户
+     * 获取当前登录用户(改为 sa-token 的做法)
      *
      * @param request
      * @return
      */
     @Override
     public User getLoginUser(HttpServletRequest request) {
+        /*
         // 先判断是否已登录
         Object userObj = request.getSession().getAttribute(USER_LOGIN_STATE);
         User currentUser = (User) userObj;
@@ -172,37 +183,87 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             throw new BusinessException(ErrorCode.NOT_LOGIN_ERROR);
         }
         return currentUser;
+        */
+
+        Object loginUserId = StpUtil.getLoginIdDefaultNull();
+        if (loginUserId == null) {
+            throw new BusinessException(ErrorCode.NOT_LOGIN_ERROR);
+        }
+
+        // 从数据库查询（追求性能的话可以注释，直接走缓存）
+        User currentUser = this.getById((String)loginUserId);
+        if (currentUser == null) {
+            throw new BusinessException(ErrorCode.NOT_LOGIN_ERROR);
+        }
+
+        return currentUser;
+
+        /* 如果用户信息几乎很少修改，可以不查数据库，直接从 Sa-Token 的 Session 中获取之前保存的用户登录态
+        // 先判断是否已登录
+        Object loginId = StpUtil.getLoginIdDefaultNull();
+        if (Objects.isNull(loginId)) {
+            throw new BusinessException(ErrorCode.NOT_LOGIN_ERROR);
+        }
+        return (User) StpUtil.getSessionByLoginId(loginId).get(USER_LOGIN_STATE);
+         */
     }
 
     /**
-     * 获取当前登录用户（允许未登录）
+     * 获取当前登录用户(允许未登录)(改为 sa-token 的做法)
      *
      * @param request
      * @return
      */
     @Override
     public User getLoginUserPermitNull(HttpServletRequest request) {
-        // 先判断是否已登录
-        Object userObj = request.getSession().getAttribute(USER_LOGIN_STATE);
-        User currentUser = (User) userObj;
-        if (currentUser == null || currentUser.getId() == null) {
+        /*
+        Object loginUserId = StpUtil.getLoginIdDefaultNull();
+        if (loginUserId == null) {
             return null;
         }
-        // 从数据库查询（追求性能的话可以注释，直接走缓存）
-        long userId = currentUser.getId();
-        return this.getById(userId);
+        return this.getById((String) loginUserId);
+        */
+
+        Object loginUserId = StpUtil.getLoginIdDefaultNull();
+        if (loginUserId == null) {
+            return null;
+        }
+
+        return this.getById((String) loginUserId);
+
+//        // 先判断是否已登录
+//        Object userObj = request.getSession().getAttribute(USER_LOGIN_STATE);
+//        User currentUser = (User) userObj;
+//
+//        if (currentUser == null || currentUser.getId() == null) {
+//            return null;
+//        }
+//
+//        // 从数据库查询（追求性能的话可以注释，直接走缓存）
+//        long userId = currentUser.getId();
+//
+//        return this.getById(userId);
     }
 
     /**
-     * 是否为管理员
+     * 是否为管理员(改为 sa-token 的做法)
      *
      * @param request
      * @return
      */
     @Override
+    /*
     public boolean isAdmin(HttpServletRequest request) {
         // 仅管理员可查询
         Object userObj = request.getSession().getAttribute(USER_LOGIN_STATE);
+        User user = (User) userObj;
+        return isAdmin(user);
+    }
+    */
+    public boolean isAdmin(HttpServletRequest request) {
+        // 仅管理员可查询
+        // 基于 Sa-Token 改造
+        Object userObj = StpUtil.getSession().get(USER_LOGIN_STATE);
         User user = (User) userObj;
         return isAdmin(user);
     }
@@ -213,17 +274,24 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     /**
-     * 用户注销
+     * 用户注销(改为 sa-token 的做法)
      *
      * @param request
      */
     @Override
     public boolean userLogout(HttpServletRequest request) {
+        /*
         if (request.getSession().getAttribute(USER_LOGIN_STATE) == null) {
             throw new BusinessException(ErrorCode.OPERATION_ERROR, "未登录");
         }
         // 移除登录态
         request.getSession().removeAttribute(USER_LOGIN_STATE);
+        return true;
+        */
+
+        // NOTE: 修改为 sa-token 的做法
+        StpUtil.checkLogin();
+        StpUtil.logout(); // 默认所有设备都退出登陆
         return true;
     }
 
@@ -282,9 +350,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         return queryWrapper;
     }
 
+    /**
+     * 添加用户签到记录
+     *
+     * @param userId
+     * @return
+     */
     @Override
     public boolean addUserSignIn(long userId) {
-        LocalDateTime now = LocalDateTime.now();
+        LocalDate now = LocalDate.now();
         String key = RedisConstant.getUserSignInRedisKey(now.getYear(), userId);
         RBitSet signInBitSet = redissonClient.getBitSet(key);
         int offset = now.getDayOfYear();

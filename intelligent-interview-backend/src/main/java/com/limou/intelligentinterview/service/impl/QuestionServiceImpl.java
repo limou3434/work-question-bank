@@ -36,6 +36,7 @@ import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -261,6 +262,12 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
         return questionPage;
     }
 
+    /**
+     * 向 ES 中进行分词查询
+     *
+     * @param questionQueryRequest
+     * @return
+     */
     @Override
     public Page<Question> searchFromEs(QuestionQueryRequest questionQueryRequest) {
         // 获取参数
@@ -334,6 +341,42 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
         }
         page.setRecords(resourceList);
         return page;
+    }
+
+    /**
+     * 批量删除题目
+     *
+     * @param questionIdList
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class) // 管理数据库事务回滚(默认运行时异常回滚, 但是这里设置了全部异常都回滚)
+    public void batchDeleteQuestions(List<Long> questionIdList) {
+        // 参数校验
+        ThrowUtils.throwIf(CollUtil.isEmpty(questionIdList), ErrorCode.PARAMS_ERROR, "要删除的题目列表不能空传递");
+
+        // TODO: 不知道需不需要做非法校验
+
+        // 实际操作: 向题库中删除批量的题目
+        for (Long questionId : questionIdList) {
+            // 删除题目
+            boolean result = this.removeById(questionId);
+            ThrowUtils.throwIf(!result, ErrorCode.OPERATION_ERROR, "删除题目失败");
+
+            // 检查是否存在题目题库关联记录
+            LambdaQueryWrapper<QuestionBankQuestion> lambdaQueryWrapper = Wrappers
+                    .lambdaQuery(QuestionBankQuestion.class)
+                    .eq(QuestionBankQuestion::getQuestionId, questionId);
+
+            // 如果关系记录不存在, 跳过解绑
+            long count = questionBankQuestionService.count(lambdaQueryWrapper);
+            if (count == 0) {
+                continue;
+            }
+
+            // 移除题目题库关系
+            result = questionBankQuestionService.remove(lambdaQueryWrapper);
+            ThrowUtils.throwIf(!result, ErrorCode.OPERATION_ERROR, "删除题目题库关联失败");
+        }
     }
 
 }

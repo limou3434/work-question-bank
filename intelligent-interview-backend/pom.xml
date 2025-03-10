@@ -16,7 +16,7 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>intelligent-interview-backend</name>
     <properties>
-        <java.version>1.8</java.version>
+        <java.version>11</java.version>
     </properties>
     <dependencies>
         <dependency>
@@ -35,6 +35,13 @@
             <groupId>org.mybatis.spring.boot</groupId>
             <artifactId>mybatis-spring-boot-starter</artifactId>
             <version>2.2.2</version>
+            <exclusions>
+                <!-- 排除默认的 HikariCP, 后续改为 Druid -->
+                <exclusion>
+                    <groupId>com.zaxxer</groupId>
+                    <artifactId>HikariCP</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <!-- https://mvnrepository.com/artifact/com.baomidou/mybatis-plus-boot-starter -->
         <dependency>
@@ -42,16 +49,41 @@
             <artifactId>mybatis-plus-boot-starter</artifactId>
             <version>3.5.2</version>
         </dependency>
-        <!-- redis -->
+        <!-- alibaba/druid: https://github.com/alibaba/druid -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid-spring-boot-starter</artifactId>
+            <version>1.2.23</version>
+        </dependency>        <!-- alibaba/druid: https://github.com/alibaba/druid -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid-spring-boot-starter</artifactId>
+            <version>1.2.23</version>
+        </dependency>
+        <!-- redis: ... -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
-        <!-- redisson: https://github.com/redisson/redisson -->
+        <!-- Sa-Token: https://github.com/dromara/sa-token -->
+        <dependency>
+            <groupId>cn.dev33</groupId>
+            <artifactId>sa-token-spring-boot-starter</artifactId>
+            <version>1.39.0</version>
+        </dependency>
+        <!-- Redisson: https://github.com/redisson/redisson -->
         <dependency>
             <groupId>org.redisson</groupId>
             <artifactId>redisson</artifactId>
             <version>3.21.0</version>
+        </dependency>
+        <!-- Hotkey-client: https://gitee.com/jd-platform-opensource/hotkey -->
+        <dependency>
+            <artifactId>hotkey-client</artifactId>
+            <groupId>com.jd.platform.hotkey</groupId>
+            <version>0.0.4-SNAPSHOT</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/hotkey-client-0.0.4-SNAPSHOT.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>org.springframework.session</groupId>
@@ -80,6 +112,19 @@
             <artifactId>cos_api</artifactId>
             <version>5.6.89</version>
         </dependency>
+        <!-- Sentinel: https://github.com/alibaba/Sentinel -->
+        <dependency>
+            <!-- 注意内部有引入传输组件后, 因此需要设置 JVM 启动选项 -Dcsp.sentinel.dashboard.server=localhost:8131 -->
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-sentinel</artifactId>
+            <version>2021.0.5.0</version>
+        </dependency>
+        <!-- Nacos: https://github.com/alibaba/nacos -->
+<!--        <dependency>-->
+<!--            <groupId>com.alibaba.boot</groupId>-->
+<!--            <artifactId>nacos-config-spring-boot-starter</artifactId>-->
+<!--            <version>0.2.12</version>-->
+<!--        </dependency>-->
         <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -131,6 +176,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
+                    <includeSystemScope>true</includeSystemScope> <!-- 这将指示插件将 system 范围的依赖也包含在打包的 JAR 文件中 -->
                     <excludes>
                         <exclude>
                             <groupId>org.projectlombok</groupId>
@@ -141,5 +187,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>

@@ -72,7 +72,6 @@ export default async function BankPage({ params }) {
                 shape="round"
                 style={{ marginLeft: 10 }}
                 href={`/bank/${questionBankId}/firstQuestion/${firstQuestionId}`}
-                target="_blank"
                 disabled={!firstQuestionId} // 没有第一道题目就需要禁用
               >
                 开始刷题

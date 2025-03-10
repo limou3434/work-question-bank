@@ -1,9 +1,12 @@
-// libs/transmission.ts
+// transmission.ts: 配置传输配置
 import axios from "axios";
+
+const DEV_BASE_URL = "http://localhost:8002";
+const PROD_BASE_URL = "http://192.168.101.254:8002";
 
 // 创建 Axios 实例
 const myAxios = axios.create({
-  baseURL: "http://localhost:8002", // 请求后端(IP+PORT)
+  baseURL: DEV_BASE_URL, // 请求后端(IP+PORT)
   timeout: 10000, // 响应时间(10s)
   withCredentials: true, // 凭证携带(开启)
 });

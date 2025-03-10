@@ -8,8 +8,8 @@ import java.util.List;
 /**
  * 创建题库题目关联表请求
  *
-* @author <a href="https://github.com/xiaogithubooo">limou3434</a>
-* @from <a href="https://datalearnhub.com">大数据工作室</a>
+ * @author <a href="https://github.com/xiaogithubooo">limou3434</a>
+ * @from <a href="https://datalearnhub.com">大数据工作室</a>
  */
 @Data
 public class QuestionBankQuestionAddRequest implements Serializable {

@@ -4,12 +4,16 @@
 
 /* 引入样式 */
 import "./page.css";
+import { PageContainer } from "@ant-design/pro-components";
 
 /* 组织页面 */
 export default function DataPage() {
   return (
     <div id="dataPage" className="max-width-content">
-      <h1>Data Page</h1>
+      <PageContainer>
+        <h1>Data Page</h1>
+        {/* TODO: 设计关于本网站的数据展示 */}
+      </PageContainer>
     </div>
   );
 }

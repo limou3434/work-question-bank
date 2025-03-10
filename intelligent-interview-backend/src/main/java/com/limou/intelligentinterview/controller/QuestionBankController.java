@@ -1,6 +1,11 @@
 package com.limou.intelligentinterview.controller;
 
+import cn.dev33.satoken.annotation.SaCheckRole;
+import com.alibaba.csp.sentinel.annotation.SentinelResource;
+import com.alibaba.csp.sentinel.slots.block.BlockException;
+import com.alibaba.csp.sentinel.slots.block.degrade.DegradeException;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.jd.platform.hotkey.client.callback.JdHotKeyStore;
 import com.limou.intelligentinterview.annotation.AuthCheck;
 import com.limou.intelligentinterview.common.BaseResponse;
 import com.limou.intelligentinterview.common.DeleteRequest;
@@ -59,7 +64,7 @@ public class QuestionBankController {
      * @return
      */
     @PostMapping("/add")
-    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
+    @SaCheckRole(UserConstant.ADMIN_ROLE) // @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
     public BaseResponse<Long> addQuestionBank(@RequestBody QuestionBankAddRequest questionBankAddRequest, HttpServletRequest request) {
         ThrowUtils.throwIf(questionBankAddRequest == null, ErrorCode.PARAMS_ERROR);
         // todo 在此处将实体类和 DTO 进行转换
@@ -86,7 +91,7 @@ public class QuestionBankController {
      * @return
      */
     @PostMapping("/delete")
-    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
+    @SaCheckRole(UserConstant.ADMIN_ROLE) // @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
     public BaseResponse<Boolean> deleteQuestionBank(@RequestBody DeleteRequest deleteRequest, HttpServletRequest request) {
         if (deleteRequest == null || deleteRequest.getId() <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
@@ -113,7 +118,7 @@ public class QuestionBankController {
      * @return
      */
     @PostMapping("/update")
-    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
+    @SaCheckRole(UserConstant.ADMIN_ROLE) // @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
     public BaseResponse<Boolean> updateQuestionBank(@RequestBody QuestionBankUpdateRequest questionBankUpdateRequest) {
         if (questionBankUpdateRequest == null || questionBankUpdateRequest.getId() <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
@@ -134,7 +139,7 @@ public class QuestionBankController {
     }
 
     /**
-     * 根据 id 获取题库（封装类）
+     * 根据 id 获取题库（封装类）(set first-level-cache)
      *
      * @param questionBankQueryRequest
      * @return
@@ -145,6 +150,15 @@ public class QuestionBankController {
 
         Long id = questionBankQueryRequest.getId();
         ThrowUtils.throwIf(id <= 0, ErrorCode.PARAMS_ERROR);
+
+        // search cache
+        String key = "bank_detail_" + id;
+        if (JdHotKeyStore.isHotKey(key)) {
+            Object cacheQuestionBankVO = JdHotKeyStore.get(key);
+            if (cacheQuestionBankVO != null){
+               return ResultUtils.success((QuestionBankVO) cacheQuestionBankVO);
+            }
+        }
 
         // 查询数据库
         QuestionBank questionBank = questionBankService.getById(id);
@@ -163,6 +177,13 @@ public class QuestionBankController {
             questionBankVO.setQuestionPage(questionVOPage);
         }
 
+        JdHotKeyStore.smartSet(key, questionBankVO); // set cache(But the key must be a hot key.)
+
+        // TODO: 可以只利用 JDHotKey 的探测功能，将查询数据库动作改为查询 Redis，这样就形成了多级缓存，而我们的 Redis 也可以做主动缓存
+        // TODO: 可以降级运行
+        // TODO: 增加堆热点题目的自动缓存
+        // TODO: 编写注解，以 @Cacheable 注解来使用 AOP 快速扫描实现快速热点
+
         // 获取封装类
         return ResultUtils.success(questionBankVO);
     }
@@ -174,7 +195,7 @@ public class QuestionBankController {
      * @return
      */
     @PostMapping("/list/page")
-    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
+    @SaCheckRole(UserConstant.ADMIN_ROLE) // @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
     public BaseResponse<Page<QuestionBank>> listQuestionBankByPage(@RequestBody QuestionBankQueryRequest questionBankQueryRequest) {
         long current = questionBankQueryRequest.getCurrent();
         long size = questionBankQueryRequest.getPageSize();
@@ -185,17 +206,22 @@ public class QuestionBankController {
     }
 
     /**
-     * 分页获取题库列表（封装类）
+     * 分页获取题库列表（封装类）(flow control)
      *
      * @param questionBankQueryRequest
      * @param request
      * @return
      */
     @PostMapping("/list/page/vo")
+    @SentinelResource(
+            value = "listQuestionBankVOByPage",
+            blockHandler = "handleBlockException",
+            fallback = "handleFallback"
+    )
     public BaseResponse<Page<QuestionBankVO>> listQuestionBankVOByPage(
             @RequestBody QuestionBankQueryRequest questionBankQueryRequest,
-            HttpServletRequest request) {
-
+            HttpServletRequest request
+    ) {
         long current = questionBankQueryRequest.getCurrent();
         long size = questionBankQueryRequest.getPageSize();
 
@@ -210,6 +236,35 @@ public class QuestionBankController {
 
         // 获取封装类
         return ResultUtils.success(questionBankService.getQuestionBankVOPage(questionBankPage, request));
+    }
+
+    // TODO: 最好是编写流量控制和熔断控制的类, 更加优雅
+    /**
+     * listQuestionBankVOByPage 对应流量机制(对 普通业务异常 + 内置熔断异常 进行处理)
+     */
+    public BaseResponse<Page<QuestionBankVO>> handleBlockException(
+            @RequestBody QuestionBankQueryRequest questionBankQueryRequest,
+            HttpServletRequest request,
+            BlockException ex
+    ) {
+        // 熔断机制处理
+        if (ex instanceof DegradeException) {
+            return handleFallback(questionBankQueryRequest, request, ex);
+        }
+
+        // 流量机制处理
+        return ResultUtils.error(ErrorCode.SYSTEM_ERROR, "系统压力较大, 请稍后再尝试");
+    }
+
+    /**
+     * listQuestionBankVOByPage 对应熔断机制(对 普通业务异常 进行处理)
+     */
+    public BaseResponse<Page<QuestionBankVO>> handleFallback(
+            @RequestBody QuestionBankQueryRequest questionBankQueryRequest,
+            HttpServletRequest request,
+            Throwable ex
+    ) {
+        return ResultUtils.success(null); // TODO: 可以返回本地数据或空数据
     }
 
     /**
@@ -245,7 +300,7 @@ public class QuestionBankController {
      * @return
      */
     @PostMapping("/edit")
-    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
+    @SaCheckRole(UserConstant.ADMIN_ROLE) // @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
     public BaseResponse<Boolean> editQuestionBank(@RequestBody QuestionBankEditRequest questionBankEditRequest, HttpServletRequest request) {
 
         if (questionBankEditRequest == null || questionBankEditRequest.getId() <= 0) {

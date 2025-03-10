@@ -28,7 +28,7 @@ export default async function QuestionPage({ params }) {
     question = res.data;
   } catch (e) {
     // @ts-ignore
-    message.error("获取题目详情失败: " + e.message);
+    console.error("获取题目详情失败: " + e.message);
   }
 
   // 如果题目不存在

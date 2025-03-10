@@ -23,8 +23,9 @@ import javax.servlet.http.HttpServletRequest;
  * @author <a href="https://github.com/xiaogithubooo">limou3434</a>
  * @from <a href="https://datalearnhub.com">大数据工作室</a>
  */
-@Aspect // 声明这个类是一个切面, 用于拦截方法的执行并且插入自定义逻辑
-@Component // 将这个类注册 Spring 的组件, 这会自动管理这个组件的生命周期(放入某个容器中进行管理), 无需用户实例化
+// 本来使用的是自定义注解, 现在改为使用 sa-token, 故注释掉下面的两个注解, 防止被 spring boot 扫描
+// @Aspect // 声明这个类是一个切面, 用于拦截方法的执行并且插入自定义逻辑
+// @Component // 将这个类注册 Spring 的组件, 这会自动管理这个组件的生命周期(放入某个容器中进行管理), 无需用户实例化
 // 切面类必须作为 Spring 容器中的 Bean, 才能被自动扫描和应用到程序中.
 // 因此使用 @Component 可以让 Spring 识别到这个类, 并使其具备拦截功能(实际上是扫描所有带有 @Service 和 @Component 标识的).
 // Spring 在启动时会自动扫描 @Component 注解的类，并将其注册到 IoC 容器中
