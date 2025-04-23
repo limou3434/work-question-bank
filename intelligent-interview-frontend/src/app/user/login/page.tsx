@@ -43,10 +43,7 @@ const UserLoginPage: React.FC = () => {
         router.replace("/"); // 跳转页面
         form.resetFields(); // 重置表单
       }
-    } catch (e) {
-      // @ts-ignore
-      message.error("登入失败:  " + e.message); // 提示登入失败
-    }
+    } catch (e) {}
   };
 
   return (
