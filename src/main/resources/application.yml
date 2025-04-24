@@ -1,3 +1,97 @@
+# 配置框架(使用 java -jar app.jar --spring.profiles.active=develop | release | production 来启动项目, 其中 release 有时间就拿来测试, 而 production 存储在 Github 上, 每次修改 Github 配置就需要刷新(这个有时间可以优化为无需重启))
+spring:
+  ## 配置环境
+  profiles: # 配置覆盖配置文件
+    active: ${SPRING_PROFILES_ACTIVE:develop} # 默认启动开发环境
+  ## 配置名称
+  application:
+    name: work-question-bank
+  ## 数源配置
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/work_question_bank
+    username: wqb
+    password: Qwe54188_
+    type: com.alibaba.druid.pool.DruidDataSource # 指定数据源类型
+    druid: # 配置连接池(在使用 Spring Boot 2.x 的情况下默认 HikariCP 连接池大小是 10, 当前请求量大起来之后, 如果数据库执行的不够快, 那么请求都会被阻塞等待获取连接池的连接上, 不过即便我们可以调优, 也无法在没有引入任何外部组件的情况下检测据库连接池, 更别说有依据得调优了, 所以这里引入了 Druid)
+      ########### 设置最基本的配置 ##########
+      initial-size: 10 # 配置初始化大小
+      minIdle: 10 # 配置初始化最小
+      max-active: 10 # 配置初始化最大
+      max-wait: 60000 # 配置获取连接等待超时的时间(单位: 毫秒)
+      time-between-eviction-runs-millis: 2000 # 配置间隔多久才进行一次检测, 检测需要关闭的空闲连接(单位: 毫秒)
+      min-evictable-idle-time-millis: 600000 # 配置一个连接在池中最小生存的时间(单位: 毫秒)
+      max-evictable-idle-time-millis: 900000 # 配置一个连接在池中最大生存的时间(单位: 毫秒)
+      validationQuery: select 1 # # 用来测试连接是否可用的 SQL 语句, 默认值每种数据库都不相同, 这是 mysql
+      testWhileIdle: true # 应用向连接池申请连接, 并且 testOnBorrow 为 false 时, 连接池将会判断连接是否处于空闲状态, 如果是, 则验证这条连接是否可用
+      testOnBorrow: false # 如果为 true, 默认 false, 应用向连接池申请连接时, 连接池会判断这条连接是否是可用的
+      testOnReturn: false # 如果为 true, 默认 false, 当应用使用完连接, 连接池回收连接的时候会判断该连接是否还可用
+      poolPreparedStatements: true # 是否缓存 preparedStatement, 也就是 PSCache, PSCache 对支持游标的数据库性能提升巨大, 比如说 Oracle
+      maxOpenPreparedStatements: 20 # # 要启用 PSCache, 必须配置大于 0, 当大于 0 时, poolPreparedStatements 自动触发修改为 true, 在 Druid 中，不会存在 Oracle 下 PSCache 占用内存过多的问题, 可以把这个数值配置大一些, 比如说 100
+      keepAlive: true # 连接池中的 minIdle 数量以内的连接, 空闲时间超过 minEvictableIdleTimeMillis, 则会执行 keepAlive 操作
+      aop-patterns: "com.springboot.template.dao.*" # Spring 监控, 利用 aop 对指定接口的执行时间, jdbc 数进行记录
+      ########### 启用内置过滤器(第一个 stat 必须, 否则监控不到 SQL), 自己配置监控统计拦截的 filter ##########
+      filters: stat,wall,log4j2
+      filter:
+        # 开启 druiddatasource 的状态监控
+        stat:
+          enabled: true
+          db-type: mysql
+          log-slow-sql: true # 开启慢 sql 监控, 超过 2s 就认为是慢 sql, 记录到日志中
+          slow-sql-millis: 2000
+        # 日志监控，使用slf4j 进行日志输出
+        slf4j:
+          enabled: true
+          statement-log-error-enabled: true
+          statement-create-after-log-enabled: false
+          statement-close-after-log-enabled: false
+          result-set-open-after-log-enabled: false
+          result-set-close-after-log-enabled: false
+      ########## 配置 WebStatFilter, 用于采集 web 关联监控的数据 ##########
+      web-stat-filter:
+        enabled: true # 启动 StatFilter
+        url-pattern: /* # 过滤所有url
+        exclusions: "*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*" # 排除一些不必要的 url
+        session-stat-enable: true # 开启 session 统计功能
+        session-stat-max-count: 1000 # session 的最大个数, 默认 100
+      ########## 配置 StatViewServlet(监控页面), 用于展示 Druid 的统计信息 ##########
+      stat-view-servlet:
+        enabled: true # 启用 StatViewServlet
+        url-pattern: /druid/* # 访问内置监控页面的路径, 内置监控页面的首页是 /druid/index.html
+        reset-enable: false # 不允许清空统计数据, 重新计算
+        login-username: druid # 配置监控页面访问密码
+        login-password: Qwe54188_
+        deny: # 拒绝访问的地址, deny 优先于 allow, 如果在 deny 列表中, 就算在 allow 列表中, 也会被拒绝
+        # allow: 127.0.0.1 # 允许访问的地址, 如果 allow 没有配置或者为空, 则允许所有访问
+  ## 配置缓存
+  redis:
+    database: 2 # Redis 数据库索引(默认为 0, 通常为了方便开发会认为 0 号为生产环境、1 号为测试环境、2 号为开发环境)
+    host: 127.0.0.1 # Redis 服务器地址
+    port: 6379 # Redis 服务器连接端口
+    # password: Qwe54188_ # Redis 服务器连接密码(默认为空)
+    timeout: 10s # 连接超时时间
+    lettuce:
+      pool: # 链接池配置
+        max-active: 200 # 连接池最大连接数
+        max-wait: -1ms # 连接池最大阻塞等待时间(使用负值表示没有限制)
+        max-idle: 10 # 连接池中的最大空闲连接
+        min-idle: 0 # 连接池中的最小空闲连接
+  ## 配置引擎
+  elasticsearch: # 搜索引擎配置
+    uris: http://localhost:9200
+    # username: root
+    # password: 123456
+#  ## 配置控制
+#  servlet:
+#    multipart: # 文件上传
+#      max-file-size: 10MB # 大小限制
+#  session: # 会话配置
+#    # store-type: redis # 先配置 Redis 后可开启分布式 session
+#    timeout: 2592000 # 30 天过期
+#  mvc:
+#    pathmatch:
+#      matching-strategy: ant_path_matcher
+
 # 项目服务
 server:
   address: 127.0.0.1
@@ -8,108 +102,12 @@ server:
       cookie:
         max-age: 2592000 # 设置 cookie 30 天过期
 
-# 框架配置
-spring:
-  application:
-    name: work-question-bank
-#  profiles: # 配置覆盖配置文件
-#    active: prod
-  mvc:
-    pathmatch:
-      matching-strategy: ant_path_matcher
-  session: # 会话配置
-    # store-type: redis # 先配置 Redis 后可开启分布式 session
-    timeout: 2592000 # 30 天过期
-  datasource: # 数据库配置
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/work_question_bank
-    username: wqb
-    password: Qwe54188_
-    type: com.alibaba.druid.pool.DruidDataSource # 指定数据源类型
-    druid: # Druid 配置
-      initial-size: 10 # 配置初始化大小、最小、最大
-      minIdle: 10
-      max-active: 10
-      # 配置获取连接等待超时的时间(单位：毫秒)
-      max-wait: 60000
-      # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
-      time-between-eviction-runs-millis: 2000
-      # 配置一个连接在池中最小生存的时间，单位是毫秒
-      min-evictable-idle-time-millis: 600000
-      max-evictable-idle-time-millis: 900000
-      # 用来测试连接是否可用的SQL语句,默认值每种数据库都不相同,这是mysql
-      validationQuery: select 1
-      # 应用向连接池申请连接，并且testOnBorrow为false时，连接池将会判断连接是否处于空闲状态，如果是，则验证这条连接是否可用
-      testWhileIdle: true
-      # 如果为true，默认是false，应用向连接池申请连接时，连接池会判断这条连接是否是可用的
-      testOnBorrow: false
-      # 如果为true（默认false），当应用使用完连接，连接池回收连接的时候会判断该连接是否还可用
-      testOnReturn: false
-      # 是否缓存preparedStatement，也就是PSCache。PSCache对支持游标的数据库性能提升巨大，比如说oracle
-      poolPreparedStatements: true
-      # 要启用PSCache，必须配置大于0，当大于0时， poolPreparedStatements自动触发修改为true，
-      # 在Druid中，不会存在Oracle下PSCache占用内存过多的问题，
-      # 可以把这个数值配置大一些，比如说100
-      maxOpenPreparedStatements: 20
-      # 连接池中的minIdle数量以内的连接，空闲时间超过minEvictableIdleTimeMillis，则会执行keepAlive操作
-      keepAlive: true
-      # Spring 监控，利用aop 对指定接口的执行时间，jdbc数进行记录
-      aop-patterns: "com.springboot.template.dao.*"
-      ########### 启用内置过滤器（第一个 stat 必须，否则监控不到SQL）##########
-      filters: stat,wall,log4j2
-      # 自己配置监控统计拦截的filter
-      filter:
-        # 开启druiddatasource的状态监控
-        stat:
-          enabled: true
-          db-type: mysql
-          # 开启慢sql监控，超过2s 就认为是慢sql，记录到日志中
-          log-slow-sql: true
-          slow-sql-millis: 2000
-        # 日志监控，使用slf4j 进行日志输出
-        slf4j:
-          enabled: true
-          statement-log-error-enabled: true
-          statement-create-after-log-enabled: false
-          statement-close-after-log-enabled: false
-          result-set-open-after-log-enabled: false
-          result-set-close-after-log-enabled: false
-      ########## 配置WebStatFilter，用于采集web关联监控的数据 ##########
-      web-stat-filter:
-        enabled: true                   # 启动 StatFilter
-        url-pattern: /* # 过滤所有url
-        exclusions: "*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*" # 排除一些不必要的url
-        session-stat-enable: true       # 开启session统计功能
-        session-stat-max-count: 1000 # session的最大个数,默认100
-      ########## 配置StatViewServlet（监控页面），用于展示Druid的统计信息 ##########
-      stat-view-servlet:
-        enabled: true                   # 启用StatViewServlet
-        url-pattern: /druid/* # 访问内置监控页面的路径，内置监控页面的首页是/druid/index.html
-        reset-enable: false              # 不允许清空统计数据,重新计算
-        login-username: root # 配置监控页面访问密码
-        login-password: 123
-        allow: 127.0.0.1 # 允许访问的地址，如果allow没有配置或者为空，则允许所有访问
-        deny: # 拒绝访问的地址，deny优先于allow，如果在deny列表中，就算在allow列表中，也会被拒绝
-  redis: # Redis 配置
-    database: 2 # Redis 数据库索引
-    host: 127.0.0.1 # Redis 服务器地址
-    port: 6379 # Redis 服务器连接端口
-    timeout: 10s # 连接超时时间
-    # password: REDISWishuxue31415 # Redis 服务器连接密码
-  elasticsearch: # 搜索引擎配置
-    uris: http://localhost:9200
-    # username: root
-    # password: 123456
-  servlet: # 控制器配置
-    multipart: # 文件上传
-      max-file-size: 10MB # 大小限制
-
 # 接口文档
 knife4j:
   basic:
     enable: true
-#    username: knife4j
-#    password: Qwe54188_
+    username: knife4j
+    password: Qwe54188_
   enable: true
   openapi:
     title: "接口文档"
