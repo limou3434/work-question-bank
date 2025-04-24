@@ -1,13 +1,5 @@
-# 屏蔽运行缓存
-intelligent-interview-backend/.idea/
-intelligent-interview-frontend/.idea/
-
-# 屏蔽前端依赖
-intelligent-interview-frontend/node_modules
-intelligent-interview-frontend/.next
-intelligent-interview-frontend/package-lock.json
-
-# 屏蔽后端依赖
-intelligent-interview-backend/.mvn
-intelligent-interview-backend/target
+**.idea/
+**node_modules/
+**.next/
+**target/
 
