@@ -9,7 +9,7 @@ CREATE USER 'wqb'@'%' IDENTIFIED BY 'Qwe54188_';
 GRANT ALL PRIVILEGES ON work_question_bank.* TO 'wqb'@'%';
 FLUSH PRIVILEGES;
 
--- 用户表
+-- 项目数表
 create table if not exists user
 (
     id           bigint auto_increment comment 'id' primary key,
@@ -26,9 +26,9 @@ create table if not exists user
     updateTime   datetime     default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
     isDelete     tinyint      default 0                 not null comment '是否删除',
     index idx_unionId (unionId)
-) comment '用户' collate = utf8mb4_unicode_ci;
+) comment '用户' collate = utf8mb4_unicode_ci
+;
 
--- 题库表
 create table if not exists question_bank
 (
     id          bigint auto_increment comment 'id' primary key,
@@ -41,9 +41,9 @@ create table if not exists question_bank
     updateTime  datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
     isDelete    tinyint  default 0                 not null comment '是否删除',
     index idx_title (title)
-) comment '题库' collate = utf8mb4_unicode_ci;
+) comment '题库' collate = utf8mb4_unicode_ci
+;
 
--- 题目表
 create table if not exists question
 (
     id         bigint auto_increment comment 'id' primary key,
@@ -58,9 +58,9 @@ create table if not exists question
     isDelete   tinyint  default 0                 not null comment '是否删除',
     index idx_title (title),
     index idx_userId (userId)
-) comment '题目' collate = utf8mb4_unicode_ci;
+) comment '题目' collate = utf8mb4_unicode_ci
+;
 
--- 题库题目表
 create table if not exists question_bank_question
 (
     id             bigint auto_increment comment '添加题目的用户 id' primary key,
@@ -70,23 +70,25 @@ create table if not exists question_bank_question
     createTime     datetime default CURRENT_TIMESTAMP not null comment '创建时间',
     updateTime     datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
     UNIQUE (questionBankId, questionId) -- UNIQUE 确保 (questionBankId, questionId) 这个组合唯一
-) comment '题库题目' collate = utf8mb4_unicode_ci;
+) comment '题库题目' collate = utf8mb4_unicode_ci
+;
 
--- 测试数据
--- 用户表初始数据（密码是 12345678）
+-- 项目数据
 INSERT INTO user (id, userAccount, userPassword, unionId, mpOpenId, userName, userAvatar, userProfile, userRole)
-VALUES (1, 'user1', 'a1cedf10576ecbfef1ff522cdeba7c6e', 'unionId1', 'mpOpenId1', 'user1',
+VALUES (1, 'user1', '5be35df1ff07a29e983bcbaef710626f', 'unionId1', 'mpOpenId1', 'user1',
         'https://avatars.githubusercontent.com/u/113878415?s=400&u=5035dbf0cbd4990fcc5d9e994c62c58b4aea7fc6&v=4', '喜欢编程的小白', 'user'),
-       (2, 'user2', 'a1cedf10576ecbfef1ff522cdeba7c6e', 'unionId2', 'mpOpenId2', 'user2',
+       (2, 'user2', '5be35df1ff07a29e983bcbaef710626f', 'unionId2', 'mpOpenId2', 'user2',
         'https://avatars.githubusercontent.com/u/113878415?s=400&u=5035dbf0cbd4990fcc5d9e994c62c58b4aea7fc6&v=4', '全栈开发工程师', 'user'),
-       (3, 'user3', 'a1cedf10576ecbfef1ff522cdeba7c6e', 'unionId3', 'mpOpenId3', 'user3',
+       (3, 'user3', '5be35df1ff07a29e983bcbaef710626f', 'unionId3', 'mpOpenId3', 'user3',
         'https://avatars.githubusercontent.com/u/113878415?s=400&u=5035dbf0cbd4990fcc5d9e994c62c58b4aea7fc6&v=4', '前端爱好者', 'user'),
-       (4, 'gimou', 'a1cedf10576ecbfef1ff522cdeba7c6e', 'unionId4', 'mpOpenId4', 'user4',
+       (4, 'gimou', '5be35df1ff07a29e983bcbaef710626f', 'unionId4', 'mpOpenId4', 'user4',
         'https://avatars.githubusercontent.com/u/113878415?s=400&u=5035dbf0cbd4990fcc5d9e994c62c58b4aea7fc6&v=4', '后端开发工程师', 'user'),
-       (5, 'limou', 'a1cedf10576ecbfef1ff522cdeba7c6e', 'unionId5', 'mpOpenId5', '程序员 limou3434', 'https://avatars.githubusercontent.com/u/113878415?s=400&u=5035dbf0cbd4990fcc5d9e994c62c58b4aea7fc6&v=4',
-        '系统管理员', 'admin');
+       (5, 'limou', '5be35df1ff07a29e983bcbaef710626f', 'unionId5', 'mpOpenId5', '程序员 limou3434', 'https://avatars.githubusercontent.com/u/113878415?s=400&u=5035dbf0cbd4990fcc5d9e994c62c58b4aea7fc6&v=4',
+        '系统管理员', 'admin'),
+       (6, 'dimou', '5be35df1ff07a29e983bcbaef710626f', 'unionId6', 'mpOpenId6', 'test', 'https://picx.zhimg.com/v2-9bc49daad69ac6fd88a9d354c9932677_l.jpg?source=172ae18b',
+        '服务开发员', 'user')
+;
 
--- 题库表初始数据
 INSERT INTO question_bank (title, description, picture, userId)
 VALUES ('JavaScript 基础', '包含 JavaScript 的基础知识题目',
         'https://pic.code-nav.cn/mianshiya/question_bank_picture/1777886594896760834/JldkWf9w_JavaScript.png', 1),
@@ -109,9 +111,9 @@ VALUES ('JavaScript 基础', '包含 JavaScript 的基础知识题目',
        ('数据分析', '数据分析和可视化', 'https://www.mianshiya.com/logo.png', 2),
        ('人工智能', '机器学习与深度学习基础', 'https://www.mianshiya.com/logo.png', 3),
        ('区块链技术', '区块链的基本原理和应用', 'https://www.mianshiya.com/logo.png', 1),
-       ('项目管理', '软件开发项目的管理和执行', 'https://www.mianshiya.com/logo.png', 2);
+       ('项目管理', '软件开发项目的管理和执行', 'https://www.mianshiya.com/logo.png', 2)
+;
 
--- 题目表初始数据
 INSERT INTO question (title, content, tags, answer, userId)
 VALUES ('JavaScript 变量提升', '请解释 JavaScript 中的变量提升现象。', '["JavaScript", "基础"]',
         '变量提升是指在 JavaScript 中，变量声明会被提升到作用域的顶部。', 1),
@@ -152,9 +154,9 @@ VALUES ('JavaScript 变量提升', '请解释 JavaScript 中的变量提升现�
        ('Vue 的双向数据绑定', '请解释 Vue.js 是如何实现双向数据绑定的。', '["Vue", "数据绑定"]',
         'Vue.js 通过数据劫持和发布-订阅模式实现了双向数据绑定。', 1),
        ('前端工程化的意义', '为什么需要前端工程化？', '["前端", "工程化"]',
-        '前端工程化能够提高开发效率、代码质量和可维护性，规范开发流程。', 2);
+        '前端工程化能够提高开发效率、代码质量和可维护性，规范开发流程。', 2)
+;
 
--- 题库题目关联初始数据
 INSERT INTO question_bank_question (questionBankId, questionId, userId)
 VALUES (1, 1, 1),
        (1, 2, 1),
@@ -183,4 +185,5 @@ VALUES (1, 1, 1),
        (9, 9, 3),
        (9, 17, 3),
        (10, 12, 1),
-       (10, 20, 1);
+       (10, 20, 1)
+;
