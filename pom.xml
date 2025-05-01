@@ -95,12 +95,20 @@
             <optional>true</optional>
         </dependency>
 
-        <!-- Hutool: https://hutool.cn/docs/index.html#/-->
+        <!-- Hutool: https://doc.hutool.cn/pages/index/ -->
         <dependency>
             <!-- Hutool 提供了一些使用的 Java 小工具 -->
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
             <version>5.8.8</version>
+        </dependency>
+
+        <!-- Guava: https://github.com/google/guava?tab=readme-ov-file  -->
+        <dependency>
+            <!-- 类似 Hutoll 的工具包 -->
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>31.1-jre</version>
         </dependency>
 
         <!-- Commons Lang3: https://commons.apache.org/proper/commons-lang/ -->
@@ -138,7 +146,7 @@
             <version>3.5.11</version>
         </dependency>
 
-        <!-- Sa-Token: https://github.com/dromara/sa-token -->
+        <!-- Sa-Token: https://sa-token.cc/doc.html#/ -->
         <dependency>
             <!-- Sa-Token 整合依赖 -->
             <groupId>cn.dev33</groupId>
@@ -165,21 +173,21 @@
             <version>0.2.12</version>
         </dependency>
 
-        <!-- Sentinel: https://github.com/alibaba/Sentinel -->
+        <!-- Sentinel: https://sentinelguard.io/zh-cn/index.html -->
         <dependency>
-            <!-- 注意内部有引入传输组件后, 因此需要设置 JVM 启动选项 -Dcsp.sentinel.dashboard.server=localhost:8131 -->
+            <!-- 本依赖内部集成 Sentinel 的所有核心依赖, 包括两个依赖 -->
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-sentinel</artifactId>
             <version>2021.0.5.0</version>
         </dependency>
 
-        <!-- Elasticsearch: https://github.com/elastic/elasticsearch-->
+        <!-- Elasticsearch: https://www.elastic.co/docs/get-started/ -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
         </dependency>
 
-        <!-- Druid: https://github.com/alibaba/druid -->
+        <!-- Druid: https://github.com/alibaba/druid/ -->
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid-spring-boot-starter</artifactId>
@@ -193,14 +201,14 @@
             <version>3.21.0</version>
         </dependency>
 
-        <!-- Hotkey: https://gitee.com/jd-platform-opensource/hotkey -->
-        <dependency>
-            <artifactId>hotkey-client</artifactId>
-            <groupId>com.jd.platform.hotkey</groupId>
-            <version>0.0.4-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/hotkey-client-0.0.4-SNAPSHOT.jar</systemPath>
-        </dependency>
+<!--        &lt;!&ndash; Hotkey: https://gitee.com/jd-platform-opensource/hotkey &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <artifactId>hotkey-client</artifactId>-->
+<!--            <groupId>com.jd.platform.hotkey</groupId>-->
+<!--            <version>0.0.4-SNAPSHOT</version>-->
+<!--            <scope>system</scope>-->
+<!--            <systemPath>${project.basedir}/lib/hotkey-client-0.0.4-SNAPSHOT.jar</systemPath>-->
+<!--        </dependency>-->
 
     </dependencies>
 

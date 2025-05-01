@@ -1,23 +1,21 @@
 package cn.com.edtechhub.workquestionbank.service.impl;
 
-import cn.dev33.satoken.stp.StpUtil;
-import cn.hutool.core.collection.CollUtil;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import cn.com.edtechhub.workquestionbank.common.ErrorCode;
 import cn.com.edtechhub.workquestionbank.config.MyBatisPlusConfig;
-import cn.com.edtechhub.workquestionbank.constant.CommonConstant;
 import cn.com.edtechhub.workquestionbank.constant.RedisConstant;
 import cn.com.edtechhub.workquestionbank.constant.UserConstant;
 import cn.com.edtechhub.workquestionbank.exception.BusinessException;
 import cn.com.edtechhub.workquestionbank.mapper.UserMapper;
-import cn.com.edtechhub.workquestionbank.request.user.UserQueryRequest;
 import cn.com.edtechhub.workquestionbank.model.entity.User;
 import cn.com.edtechhub.workquestionbank.model.vo.LoginUserVO;
 import cn.com.edtechhub.workquestionbank.model.vo.UserVO;
-import cn.com.edtechhub.workquestionbank.utils.DeviceUtils;
+import cn.com.edtechhub.workquestionbank.request.user.UserQueryRequest;
 import cn.com.edtechhub.workquestionbank.service.UserService;
-import cn.com.edtechhub.workquestionbank.utils.SqlUtils;
+import cn.com.edtechhub.workquestionbank.utils.DeviceUtils;
+import cn.dev33.satoken.stp.StpUtil;
+import cn.hutool.core.collection.CollUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.redisson.api.RBitSet;
@@ -221,8 +219,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         queryWrapper.like(StringUtils.isNotBlank(userProfile), "userProfile", userProfile);
         queryWrapper.like(StringUtils.isNotBlank(userName), "userName", userName);
         queryWrapper.like(StringUtils.isNotBlank(userAccount), "userAccount", userAccount);
-        queryWrapper.orderBy(SqlUtils.validSortField(sortField), sortOrder.equals(CommonConstant.SORT_ORDER_ASC),
-                sortField);
         return queryWrapper;
     }
 

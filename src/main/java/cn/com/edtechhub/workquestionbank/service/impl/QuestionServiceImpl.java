@@ -1,26 +1,25 @@
 package cn.com.edtechhub.workquestionbank.service.impl;
 
+import cn.com.edtechhub.workquestionbank.common.ErrorCode;
+import cn.com.edtechhub.workquestionbank.constant.CommonConstant;
+import cn.com.edtechhub.workquestionbank.exception.ThrowUtils;
+import cn.com.edtechhub.workquestionbank.mapper.QuestionMapper;
+import cn.com.edtechhub.workquestionbank.model.dto.QuestionEsDTO;
+import cn.com.edtechhub.workquestionbank.model.entity.Question;
+import cn.com.edtechhub.workquestionbank.model.entity.QuestionBankQuestion;
+import cn.com.edtechhub.workquestionbank.model.entity.User;
+import cn.com.edtechhub.workquestionbank.model.vo.QuestionVO;
+import cn.com.edtechhub.workquestionbank.model.vo.UserVO;
+import cn.com.edtechhub.workquestionbank.request.question.QuestionQueryRequest;
+import cn.com.edtechhub.workquestionbank.service.QuestionBankQuestionService;
+import cn.com.edtechhub.workquestionbank.service.QuestionService;
+import cn.com.edtechhub.workquestionbank.service.UserService;
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import cn.com.edtechhub.workquestionbank.common.ErrorCode;
-import cn.com.edtechhub.workquestionbank.constant.CommonConstant;
-import cn.com.edtechhub.workquestionbank.exception.ThrowUtils;
-import cn.com.edtechhub.workquestionbank.mapper.QuestionMapper;
-import cn.com.edtechhub.workquestionbank.model.dto.QuestionEsDTO;
-import cn.com.edtechhub.workquestionbank.request.question.QuestionQueryRequest;
-import cn.com.edtechhub.workquestionbank.model.entity.Question;
-import cn.com.edtechhub.workquestionbank.model.entity.QuestionBankQuestion;
-import cn.com.edtechhub.workquestionbank.model.entity.User;
-import cn.com.edtechhub.workquestionbank.model.vo.QuestionVO;
-import cn.com.edtechhub.workquestionbank.model.vo.UserVO;
-import cn.com.edtechhub.workquestionbank.service.QuestionBankQuestionService;
-import cn.com.edtechhub.workquestionbank.service.QuestionService;
-import cn.com.edtechhub.workquestionbank.service.UserService;
-import cn.com.edtechhub.workquestionbank.utils.SqlUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -49,7 +48,7 @@ import java.util.stream.Collectors;
 /**
  * 题目服务实现
  *
-* @author <a href="https://github.com/limou3434">limou3434</a>
+ * @author <a href="https://github.com/limou3434">limou3434</a>
  */
 @Service
 @Slf4j
@@ -140,10 +139,6 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
         queryWrapper.eq(ObjectUtils.isNotEmpty(id), "id", id);
         queryWrapper.eq(ObjectUtils.isNotEmpty(userId), "userId", userId);
 
-        // 排序规则
-        queryWrapper.orderBy(SqlUtils.validSortField(sortField),
-                sortOrder.equals(CommonConstant.SORT_ORDER_ASC),
-                sortField);
         return queryWrapper;
     }
 

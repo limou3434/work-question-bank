@@ -1,28 +1,26 @@
 package cn.com.edtechhub.workquestionbank.service.impl;
 
-import cn.hutool.core.collection.CollUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import cn.com.edtechhub.workquestionbank.common.ErrorCode;
-import cn.com.edtechhub.workquestionbank.constant.CommonConstant;
 import cn.com.edtechhub.workquestionbank.exception.BusinessException;
 import cn.com.edtechhub.workquestionbank.exception.ThrowUtils;
 import cn.com.edtechhub.workquestionbank.mapper.QuestionBankQuestionMapper;
-import cn.com.edtechhub.workquestionbank.request.questionBankQuestion.QuestionBankQuestionQueryRequest;
 import cn.com.edtechhub.workquestionbank.model.entity.Question;
 import cn.com.edtechhub.workquestionbank.model.entity.QuestionBank;
 import cn.com.edtechhub.workquestionbank.model.entity.QuestionBankQuestion;
 import cn.com.edtechhub.workquestionbank.model.entity.User;
 import cn.com.edtechhub.workquestionbank.model.vo.QuestionBankQuestionVO;
 import cn.com.edtechhub.workquestionbank.model.vo.UserVO;
+import cn.com.edtechhub.workquestionbank.request.questionBankQuestion.QuestionBankQuestionQueryRequest;
 import cn.com.edtechhub.workquestionbank.service.QuestionBankQuestionService;
 import cn.com.edtechhub.workquestionbank.service.QuestionBankService;
 import cn.com.edtechhub.workquestionbank.service.QuestionService;
 import cn.com.edtechhub.workquestionbank.service.UserService;
-import cn.com.edtechhub.workquestionbank.utils.SqlUtils;
+import cn.hutool.core.collection.CollUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.aop.framework.AopContext;
@@ -34,14 +32,17 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
-import java.util.concurrent.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
  * 题库题目关联表服务实现
  *
-* @author <a href="https://github.com/limou3434">limou3434</a>
-* @from <a href="https://datalearnhub.com">大数据工作室</a>
+ * @author <a href="https://github.com/limou3434">limou3434</a>
+ * @from <a href="https://datalearnhub.com">大数据工作室</a>
  */
 @Service
 @Slf4j
@@ -62,7 +63,7 @@ public class QuestionBankQuestionServiceImpl extends ServiceImpl<QuestionBankQue
      * 校验数据
      *
      * @param questionBankQuestion
-     * @param add      对创建的数据进行校验
+     * @param add                  对创建的数据进行校验
      */
     @Override
     public void validQuestionBankQuestion(QuestionBankQuestion questionBankQuestion, boolean add) {
@@ -70,14 +71,14 @@ public class QuestionBankQuestionServiceImpl extends ServiceImpl<QuestionBankQue
 
         // 题目必须存在
         Long questionId = questionBankQuestion.getQuestionId();
-        if(questionId != null) {
+        if (questionId != null) {
             Question question = questionService.getById(questionId);
             ThrowUtils.throwIf(question == null, ErrorCode.NOT_FOUND_ERROR, "题目不存在");
         }
 
         // 题库必须存在
         Long questionBankId = questionBankQuestion.getQuestionBankId();
-        if(questionBankId != null) {
+        if (questionBankId != null) {
             QuestionBank questionBank = questionBankService.getById(questionBankId);
             ThrowUtils.throwIf(questionBank == null, ErrorCode.NOT_FOUND_ERROR, "题库不存在");
         }
@@ -111,10 +112,6 @@ public class QuestionBankQuestionServiceImpl extends ServiceImpl<QuestionBankQue
         queryWrapper.eq(ObjectUtils.isNotEmpty(userId), "userId", userId);
         queryWrapper.eq(ObjectUtils.isNotEmpty(questionBankId), "questionBankId", questionBankId);
         queryWrapper.eq(ObjectUtils.isNotEmpty(questionId), "questionId", questionId);
-        // 排序规则
-        queryWrapper.orderBy(SqlUtils.validSortField(sortField),
-                sortOrder.equals(CommonConstant.SORT_ORDER_ASC),
-                sortField);
         return queryWrapper;
     }
 
@@ -498,7 +495,7 @@ public class QuestionBankQuestionServiceImpl extends ServiceImpl<QuestionBankQue
         } catch (Exception e) {
             // 捕获其他异常，做通用处理
             // log.error("添加题目到题库时发生未知错误, 题目 id: {}, 题库 id: {}, 错误信息: {}", questionId, questionBankId, e.getMessage());
-             log.error("添加题目到题库时发生未知错误, 错误信息: {}", e.getMessage());
+            log.error("添加题目到题库时发生未知错误, 错误信息: {}", e.getMessage());
             throw new BusinessException(ErrorCode.OPERATION_ERROR, "向题库绑定题目失败, 发生未知错误");
         }
     }
@@ -539,7 +536,7 @@ public class QuestionBankQuestionServiceImpl extends ServiceImpl<QuestionBankQue
         // TODO: 不知道需不需要做非法校验
 
         // 实际操作: 向题库中解绑批量的题目
-        for(long questionId : questionIdList) {
+        for (long questionId : questionIdList) {
             // 如果题目题库关联记录记录不存在则跳过解绑
             LambdaQueryWrapper<QuestionBankQuestion> lambdaQueryWrapper = Wrappers.lambdaQuery(QuestionBankQuestion.class)
                     .eq(QuestionBankQuestion::getQuestionId, questionId)

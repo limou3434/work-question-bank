@@ -5,6 +5,7 @@ spring:
       stat-view-servlet:
         allow:
   redis:
+    database: 1
     host: work-redis
   cloud:
     sentinel:

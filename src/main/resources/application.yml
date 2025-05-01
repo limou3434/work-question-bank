@@ -8,7 +8,6 @@ spring:
     name: work-question-bank
   ## 数源配置
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://127.0.0.1:3306/work_question_bank
     username: wqb
     password: Qwe54188_
@@ -100,7 +99,7 @@ server:
 logging:
   level:
     # root: DEBUG # 如果需要仔细调试可以打开这个选项
-    cn.com.edtechhub.: DEBUG # 控制本项目包内的日志输出等级 TRACE | DEBUG | INFO | WARN | ERROR | FATAL
+    cn.com.edtechhub.workquestionbank: DEBUG # 控制本项目包内的日志输出等级 TRACE | DEBUG | INFO | WARN | ERROR | FATAL
 
 # 配置文档
 springdoc:
@@ -114,20 +113,14 @@ springdoc:
     - group: 'default'
       paths-to-match: '/**'
       packages-to-scan: cn.com.edtechhub.workquestionbank.controller
-knife4j:
+knife4j: # knife4j 的增强配置(不需要增强可以不配)
   basic:
     enable: true
     username: knife4j
     password: Qwe54188_
   enable: true
-  openapi:
-    title: "接口文档"
-    version: 1.0
-    group:
-      default:
-        api-rule: package
-        api-rule-resources:
-          - cn.com.edtechhub.workquestionbank.controller
+  setting:
+    language: zh_cn
 
 # 数据操作
 mybatis-plus:
@@ -171,9 +164,9 @@ nacos:
     type: yaml  # 选择的文件格式
     auto-refresh: true # 开启自动刷新
 
-# 热点缓存
-hotkey:
-  app-name: work-intelligent-interview
-  caffeine-size: 10000
-  push-period: 1000
-  etcd-server: http://127.0.0.1:2379
+## 热点缓存
+#hotkey:
+#  app-name: work-intelligent-interview
+#  caffeine-size: 10000
+#  push-period: 1000
+#  etcd-server: http://127.0.0.1:2379

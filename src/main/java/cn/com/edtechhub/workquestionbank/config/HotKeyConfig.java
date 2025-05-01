@@ -1,6 +1,6 @@
 package cn.com.edtechhub.workquestionbank.config;
 
-import com.jd.platform.hotkey.client.ClientStarter;
+//import com.jd.platform.hotkey.client.ClientStarter;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -43,13 +43,13 @@ public class HotKeyConfig {
      */
     @Bean
     public void initHotkey() {
-        ClientStarter.Builder builder = new ClientStarter.Builder();
-        ClientStarter starter = builder.setAppName(appName)
-                .setCaffeineSize(caffeineSize)
-                .setPushPeriod(pushPeriod)
-                .setEtcdServer(etcdServer)
-                .build();
-        starter.startPipeline();
+//        ClientStarter.Builder builder = new ClientStarter.Builder();
+//        ClientStarter starter = builder.setAppName(appName)
+//                .setCaffeineSize(caffeineSize)
+//                .setPushPeriod(pushPeriod)
+//                .setEtcdServer(etcdServer)
+//                .build();
+//        starter.startPipeline();
     }
 
 }

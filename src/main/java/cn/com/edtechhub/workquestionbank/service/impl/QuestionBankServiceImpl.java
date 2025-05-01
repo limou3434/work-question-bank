@@ -1,21 +1,19 @@
 package cn.com.edtechhub.workquestionbank.service.impl;
 
-import cn.hutool.core.collection.CollUtil;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import cn.com.edtechhub.workquestionbank.common.ErrorCode;
-import cn.com.edtechhub.workquestionbank.constant.CommonConstant;
 import cn.com.edtechhub.workquestionbank.exception.ThrowUtils;
 import cn.com.edtechhub.workquestionbank.mapper.QuestionBankMapper;
-import cn.com.edtechhub.workquestionbank.request.questionBank.QuestionBankQueryRequest;
 import cn.com.edtechhub.workquestionbank.model.entity.QuestionBank;
 import cn.com.edtechhub.workquestionbank.model.entity.User;
 import cn.com.edtechhub.workquestionbank.model.vo.QuestionBankVO;
 import cn.com.edtechhub.workquestionbank.model.vo.UserVO;
+import cn.com.edtechhub.workquestionbank.request.questionBank.QuestionBankQueryRequest;
 import cn.com.edtechhub.workquestionbank.service.QuestionBankService;
 import cn.com.edtechhub.workquestionbank.service.UserService;
-import cn.com.edtechhub.workquestionbank.utils.SqlUtils;
+import cn.hutool.core.collection.CollUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -31,8 +29,8 @@ import java.util.stream.Collectors;
 /**
  * 题库服务实现
  *
-* @author <a href="https://github.com/limou3434">limou3434</a>
-* @from <a href="https://datalearnhub.com">大数据工作室</a>
+ * @author <a href="https://github.com/limou3434">limou3434</a>
+ * @from <a href="https://datalearnhub.com">大数据工作室</a>
  */
 @Service
 @Slf4j
@@ -45,7 +43,7 @@ public class QuestionBankServiceImpl extends ServiceImpl<QuestionBankMapper, Que
      * 校验数据
      *
      * @param questionBank
-     * @param add      对创建的数据进行校验
+     * @param add          对创建的数据进行校验
      */
     @Override
     public void validQuestionBank(QuestionBank questionBank, boolean add) {
@@ -93,7 +91,7 @@ public class QuestionBankServiceImpl extends ServiceImpl<QuestionBankMapper, Que
         if (StringUtils.isNotBlank(searchText)) {
             // 需要拼接查询条件
             // queryWrapper.and(qw -> qw.like("title", searchText).or().like("content", searchText)); // 如果 searchText 存在, 则在数据库中查找 title 或 content 中包含 searchText 的记录
-             queryWrapper.and(qw -> qw.like("title", searchText).or().like("description", searchText)); // 如果 searchText 存在, 则在数据库中查找 title 或 content 中包含 searchText 的记录
+            queryWrapper.and(qw -> qw.like("title", searchText).or().like("description", searchText)); // 如果 searchText 存在, 则在数据库中查找 title 或 content 中包含 searchText 的记录
         }
 
         // 模糊查询
@@ -106,10 +104,6 @@ public class QuestionBankServiceImpl extends ServiceImpl<QuestionBankMapper, Que
         queryWrapper.eq(ObjectUtils.isNotEmpty(userId), "userId", userId);
         queryWrapper.eq(ObjectUtils.isNotEmpty(picture), "picture", picture);
 
-        // 排序规则
-        queryWrapper.orderBy(SqlUtils.validSortField(sortField),
-                sortOrder.equals(CommonConstant.SORT_ORDER_ASC),
-                sortField);
         return queryWrapper;
     }
 

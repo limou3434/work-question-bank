@@ -17,7 +17,7 @@ import static cn.com.edtechhub.workquestionbank.constant.UserConstant.USER_LOGIN
  */
 @Component // 保证此类被 SpringBoot 扫描，完成 Sa-Token 的自定义权限验证扩展
 @Slf4j
-public class StpInterfaceImpl implements StpInterface {
+public class SaTokenStpInterfaceImpl implements StpInterface {
 
     /**
      * 返回一个账号所拥有的权限码值集合(暂时没有用到)
