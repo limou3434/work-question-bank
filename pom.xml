@@ -40,49 +40,37 @@
 
         <!-- Spring: https://spring.io/ -->
         <dependency>
+            <!-- Spring Boot 核心依赖 -->
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-freemarker</artifactId>
+            <artifactId>spring-boot-starter</artifactId>
         </dependency>
         <dependency>
+            <!-- 引入 Spring Boot 的 Web 相关依赖, 支持 RESTful API 开发, 包含: Spring MVC(用于处理 HTTP 请求)、Jackson(用于 JSON 序列化)、Tomcat(默认内嵌的 Web 服务器) -->
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-aop</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.mybatis.spring.boot</groupId>
-            <artifactId>mybatis-spring-boot-starter</artifactId>
-            <version>2.2.2</version>
-            <exclusions>
-                <!-- 排除默认的 HikariCP, 后续改为 Druid -->
-                <exclusion>
-                    <groupId>com.zaxxer</groupId>
-                    <artifactId>HikariCP</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.session</groupId>
-            <artifactId>spring-session-data-redis</artifactId>
-        </dependency>
-<!--        <dependency>-->
-<!--            &lt;!&ndash; https://mvnrepository.com/artifact/com.github.binarywang/wx-java-mp-spring-boot-starter &ndash;&gt;-->
-<!--            <groupId>com.github.binarywang</groupId>-->
-<!--            <artifactId>wx-java-mp-spring-boot-starter</artifactId>-->
-<!--            <version>4.4.0</version>-->
-<!--        </dependency>-->
-        <dependency>
+            <!-- 提供开发时的工具，比如热加载、自动重启等, 提高开发效率 -->
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
             <scope>runtime</scope>
             <optional>true</optional>
         </dependency>
         <dependency>
+            <!-- 用于处理 @ConfigurationProperties 注解(改注解可以读取 application 的内容)的元数据生成, 方便 IDE 提示 -->
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
+        </dependency>
+        <dependency>
+            <!-- 提供 Spring AOP 面向切面编程功能, 用于实现日志或权限控制等横切逻辑 -->
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+        <dependency>
+            <!-- Spring Boot 监控组件, 主要用来给 IDEA 作为 Bean 检测所使用的 -->
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
 
         <!-- MySQL: https://www.mysql.com/ -->
@@ -94,72 +82,88 @@
 
         <!-- Redis: https://redis.io/ -->
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-redis</artifactId>
+            <!-- 提供 Redis 连接池 -->
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-pool2</artifactId>
         </dependency>
 
-        <!-- Lang: https://commons.apache.org/proper/commons-lang/ -->
+        <!-- Lombok: https://projectlombok.org/ -->
         <dependency>
+            <!-- Lombok 减少 Java 代码中的样板代码, 自动生成 getter/setter、toString()、equals() -->
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <!-- Hutool: https://hutool.cn/docs/index.html#/-->
+        <dependency>
+            <!-- Hutool 提供了一些使用的 Java 小工具 -->
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>5.8.8</version>
+        </dependency>
+
+        <!-- Commons Lang3: https://commons.apache.org/proper/commons-lang/ -->
+        <dependency>
+            <!-- Commons Lang3 是 Apache 提供的 Java 工具类库, 包含: StringUtils(字符串处理)、ObjectUtils(对象工具)、RandomStringUtils(随机字符串生成)-->
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
         </dependency>
 
-        <!-- MyBatis Plus: https://baomidou.com/ -->
+        <!-- OpenAPI: https://doc.xiaominfo.com/ -->
         <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-boot-starter</artifactId>
-            <version>3.5.2</version>
+            <groupId>com.github.xiaoymin</groupId>
+            <artifactId>knife4j-openapi3-spring-boot-starter</artifactId>
+            <version>4.4.0</version>
         </dependency>
 
-        <!-- Druid: https://github.com/alibaba/druid -->
+        <!-- MyBatis Plus: https://baomidou.com/ -->
         <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>druid-spring-boot-starter</artifactId>
-            <version>1.2.23</version>
+            <!-- 主要依赖 -->
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <version>3.5.11</version>
+            <exclusions>
+                <!-- 排除默认的 HikariCP -->
+                <exclusion>
+                    <groupId>com.zaxxer</groupId>
+                    <artifactId>HikariCP</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <!-- 解决 PaginationInnerInterceptor 失效问题 -->
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-jsqlparser</artifactId>
+            <version>3.5.11</version>
         </dependency>
 
         <!-- Sa-Token: https://github.com/dromara/sa-token -->
         <dependency>
+            <!-- Sa-Token 整合依赖 -->
             <groupId>cn.dev33</groupId>
             <artifactId>sa-token-spring-boot-starter</artifactId>
-            <version>1.39.0</version>
+            <version>1.42.0</version>
         </dependency>
-
-        <!-- Redisson: https://github.com/redisson/redisson -->
         <dependency>
-            <groupId>org.redisson</groupId>
-            <artifactId>redisson</artifactId>
-            <version>3.21.0</version>
+            <!-- Sa-Token 整合 Redis -->
+            <groupId>cn.dev33</groupId>
+            <artifactId>sa-token-redis-template</artifactId>
+            <version>1.42.0</version>
         </dependency>
-
-        <!-- Hotkey-client: https://gitee.com/jd-platform-opensource/hotkey -->
         <dependency>
-            <artifactId>hotkey-client</artifactId>
-            <groupId>com.jd.platform.hotkey</groupId>
-            <version>0.0.4-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/hotkey-client-0.0.4-SNAPSHOT.jar</systemPath>
+            <!-- Sa-Token 整合 Redis 时使用 jackson 序列化方式 -->
+            <groupId>cn.dev33</groupId>
+            <artifactId>sa-token-redis-jackson</artifactId>
+            <version>1.42.0</version>
         </dependency>
 
-        <!-- Elasticsearch: https://github.com/elastic/elasticsearch-->
+        <!-- Nacos: https://nacos.io/docs/latest/quickstart/quick-start/?spm=5238cd80.c984973.0.0.6be14023bZ0GqZ -->
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
+            <groupId>com.alibaba.boot</groupId>
+            <artifactId>nacos-config-spring-boot-starter</artifactId>
+            <version>0.2.12</version>
         </dependency>
-
-        <!-- Open API: https://doc.xiaominfo.com/docs/quick-start#openapi2 -->
-        <dependency>
-            <groupId>com.github.xiaoymin</groupId>
-            <artifactId>knife4j-openapi2-spring-boot-starter</artifactId>
-            <version>4.4.0</version>
-        </dependency>
-
-<!--        &lt;!&ndash; COS: https://cloud.tencent.com/document/product/436/10199 &ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>com.qcloud</groupId>-->
-<!--            <artifactId>cos_api</artifactId>-->
-<!--            <version>5.6.89</version>-->
-<!--        </dependency>-->
 
         <!-- Sentinel: https://github.com/alibaba/Sentinel -->
         <dependency>
@@ -169,32 +173,33 @@
             <version>2021.0.5.0</version>
         </dependency>
 
-        <!-- Nacos: https://github.com/alibaba/nacos -->
-<!--        <dependency>-->
-<!--            <groupId>com.alibaba.boot</groupId>-->
-<!--            <artifactId>nacos-config-spring-boot-starter</artifactId>-->
-<!--            <version>0.2.12</version>-->
-<!--        </dependency>-->
-
-        <!-- Easyexcel: https://github.com/alibaba/easyexcel -->
-<!--        <dependency>-->
-<!--            <groupId>com.alibaba</groupId>-->
-<!--            <artifactId>easyexcel</artifactId>-->
-<!--            <version>3.1.1</version>-->
-<!--        </dependency>-->
-
-        <!-- Hutool: https://hutool.cn/docs/index.html#/-->
+        <!-- Elasticsearch: https://github.com/elastic/elasticsearch-->
         <dependency>
-            <groupId>cn.hutool</groupId>
-            <artifactId>hutool-all</artifactId>
-            <version>5.8.8</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
         </dependency>
 
-        <!-- Lombok -->
+        <!-- Druid: https://github.com/alibaba/druid -->
         <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <optional>true</optional>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid-spring-boot-starter</artifactId>
+            <version>1.2.23</version>
+        </dependency>
+
+        <!-- Redisson: https://github.com/redisson/redisson -->
+        <dependency>
+            <groupId>org.redisson</groupId>
+            <artifactId>redisson</artifactId>
+            <version>3.21.0</version>
+        </dependency>
+
+        <!-- Hotkey: https://gitee.com/jd-platform-opensource/hotkey -->
+        <dependency>
+            <artifactId>hotkey-client</artifactId>
+            <groupId>com.jd.platform.hotkey</groupId>
+            <version>0.0.4-SNAPSHOT</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/hotkey-client-0.0.4-SNAPSHOT.jar</systemPath>
         </dependency>
 
     </dependencies>
@@ -205,15 +210,6 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                    <includeSystemScope>true</includeSystemScope> <!-- 这将指示插件将 system 范围的依赖也包含在打包的 JAR 文件中 -->
-                    <excludes>
-                        <exclude>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok</artifactId>
-                        </exclude>
-                    </excludes>
-                </configuration>
             </plugin>
         </plugins>
     </build>
