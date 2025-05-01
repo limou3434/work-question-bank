@@ -21,7 +21,6 @@ public class JsonConfig {
      */
     @Bean // @Bean 和 @Component 不同, 用于在配置类中定义一个方法, 并将该方法的返回值注册为一个 Bean
     public ObjectMapper jacksonObjectMapper(Jackson2ObjectMapperBuilder builder) {
-        // 暂时忽略...
         ObjectMapper objectMapper = builder.createXmlMapper(false).build();
         SimpleModule module = new SimpleModule();
 

@@ -1,14 +1,11 @@
-# @author <a href="https://github.com/xiaogithubooo">limou3434</a>
-# @from <a href="https://datalearnhub.com">大数据工作室</a>
-FROM maven:3.8.1-jdk-8-slim as builder
+# 基础镜像
+FROM openjdk:11-jdk-slim
 
-# Copy local code to the container image.
-WORKDIR /app
-COPY pom.xml .
-COPY src ./src
+# 编译代码(请在本地直接使用 ./mvnw clean package -DskipTests 进行编译避免容器过大)
+COPY ./target/*.jar ./app.jar
 
-# Build a release artifact.
-RUN mvn package -DskipTests
+# 运行端口
+EXPOSE 8000
 
-# Run the web service on container startup. # NOTE: 下面修改为 jar 包名即可
-CMD ["java","-jar","/app/target/intelligent-interview-backend-0.0.1-SNAPSHOT.jar","--spring.profiles.active=prod"]
+# 启动命令
+CMD ["java", "-jar", "app.jar"]

@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    url: jdbc:mysql://work-mysql:3306/work_question_bank
+    druid:
+      stat-view-servlet:
+        allow:
+  redis:
+    host: work-redis
+  cloud:
+    sentinel:
+      transport:
+        dashboard: work-sentinel:8131
+  elasticsearch:
+    uris: http://work-elasticsearch:9200
+server:
+  address: 0.0.0.0
+nacos:
+  config:
+    server-addr: work-nacos:8848
+hotkey:
+  etcd-server: http://work-etcd:2379
