@@ -18,9 +18,9 @@ import { PageContainer, ProTable } from "@ant-design/pro-components";
 import { Button, message, Popconfirm, Space, Typography } from "antd";
 import React, { useRef, useState } from "react";
 import {
-  batchDeleteQuestionsUsingPost,
-  deleteQuestionUsingPost,
-  listQuestionByPageUsingPost,
+  batchDeleteQuestions,
+  deleteQuestion,
+  listQuestionByPage,
 } from "@/api/questionController";
 import TagList from "@/components/TagList";
 import MdEditor from "@/components/MdEditor";
@@ -28,7 +28,7 @@ import UpdateBankModal from "@/app/admin/question/components/UpdateBankModel";
 import { Table } from "antd/lib";
 import BatchAddQuestionsToBankModal from "@/app/admin/question/components/BatchAddQuestionsToBankModel";
 import BatchRemoveQuestionsFormBankModal from "@/app/admin/question/components/BatchRemoveQuestionsFormBankModal";
-import { batchRemoveQuestionsFromBankUsingPost } from "@/api/questionBankQuestionController";
+import { batchRemoveQuestionsFromBank } from "@/api/questionBankQuestionController";
 
 /* 定义 */
 // 题目管理页面
@@ -63,7 +63,7 @@ const QuestionAdminPage: React.FC = () => {
   >([]);
 
   // 引用表格
-  const actionRef = useRef<ActionType>();
+  const actionRef = useRef<ActionType>(null);
 
   // 当前题目的数据
   const [currentRow, setCurrentRow] = useState<API.Question>();
@@ -73,7 +73,7 @@ const QuestionAdminPage: React.FC = () => {
     const hide = message.loading("正在删除");
     if (!row) return true;
     try {
-      await deleteQuestionUsingPost({
+      await deleteQuestion({
         id: row.id as any,
       });
       hide();
@@ -82,7 +82,7 @@ const QuestionAdminPage: React.FC = () => {
       return true;
     } catch (error: any) {
       hide();
-      message.error("删除失败: " + error.message);
+      // message.error("删除失败: " + error.message);
       return false;
     }
   };
@@ -94,7 +94,7 @@ const QuestionAdminPage: React.FC = () => {
       return true;
     }
     try {
-      await batchDeleteQuestionsUsingPost({
+      await batchDeleteQuestions({
         questionIdList,
       });
       hide();
@@ -103,7 +103,7 @@ const QuestionAdminPage: React.FC = () => {
       return true;
     } catch (error: any) {
       hide();
-      message.error("操作失败，" + error.message);
+      // message.error("操作失败，" + error.message);
     }
   };
 
@@ -315,7 +315,7 @@ const QuestionAdminPage: React.FC = () => {
             const sortOrder = sort?.[sortField] ?? undefined;
             // 获取表格内的题目数据
             // @ts-ignore
-            const { data, code } = await listQuestionByPageUsingPost({
+            const { data, code } = await listQuestionByPage({
               ...params,
               sortField,
               sortOrder,
@@ -324,8 +324,10 @@ const QuestionAdminPage: React.FC = () => {
 
             return {
               success: code === 0,
+
               // @ts-ignore
               data: data?.records || [],
+
               // @ts-ignore
               total: Number(data?.total) || 0,
             };
@@ -339,6 +341,7 @@ const QuestionAdminPage: React.FC = () => {
           columns={columns}
           onSubmit={() => {
             setCreateModalVisible(false); // 弹窗关闭
+            // @ts-ignore
             actionRef.current?.reload(); // 刷新表格, 并且重新触发 ProTable 的 request 方法
           }}
           onCancel={() => {

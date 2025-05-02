@@ -18,8 +18,8 @@ import { PageContainer, ProTable } from "@ant-design/pro-components";
 import { Button, message, Space, Typography } from "antd";
 import React, { useRef, useState } from "react";
 import {
-  deleteUserUsingPost,
-  listUserByPageUsingPost,
+  deleteUser,
+  listUserByPage,
 } from "@/api/userController";
 
 /* 定义 */
@@ -32,7 +32,7 @@ const UserAdminPage: React.FC = () => {
   const [updateModalVisible, setUpdateModalVisible] = useState<boolean>(false);
 
   // 引用表格
-  const actionRef = useRef<ActionType>();
+  const actionRef = useRef<ActionType>(null);
 
   // 当前用户的数据
   const [currentRow, setCurrentRow] = useState<API.User>();
@@ -42,7 +42,7 @@ const UserAdminPage: React.FC = () => {
     const hide = message.loading("正在删除");
     if (!row) return true;
     try {
-      await deleteUserUsingPost({
+      await deleteUser({
         id: row.id as any,
       });
       hide();
@@ -51,7 +51,7 @@ const UserAdminPage: React.FC = () => {
       return true;
     } catch (error: any) {
       hide();
-      message.error("删除失败: " + error.message);
+      // message.error("删除失败: " + error.message);
       return false;
     }
   };
@@ -171,7 +171,7 @@ const UserAdminPage: React.FC = () => {
             const sortOrder = sort?.[sortField] ?? undefined;
             // 获取表格内的用户数据
             // @ts-ignore
-            const { data, code } = await listUserByPageUsingPost({
+            const { data, code } = await listUserByPage({
               ...params,
               sortField,
               sortOrder,

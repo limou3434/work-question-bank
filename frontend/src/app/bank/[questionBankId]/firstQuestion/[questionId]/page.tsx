@@ -8,31 +8,32 @@
 
 /* 样式 */
 import "./page.css";
-import { getQuestionBankVoByIdUsingGet } from "@/api/questionBankController";
+import { getQuestionBankVoById } from "@/api/questionBankController";
 import Title from "antd/es/typography/Title";
 import { Flex, Menu, message } from "antd";
-import { getQuestionVoByIdUsingGet } from "@/api/questionController";
+import { getQuestionVoById } from "@/api/questionController";
 import Sider from "antd/es/layout/Sider";
 import { Content } from "antd/es/layout/layout";
 import QuestionCard from "@/components/QuestionCard";
 import Link from "next/link";
 
 /* 定义 */
-// @ts-ignore
+
 export default async function FirstQuestionPage({ params }) {
   const { questionBankId, questionId } = params;
 
   // 获取题库
   let bank = undefined;
   try {
-    const res = await getQuestionBankVoByIdUsingGet({
+    const res = await getQuestionBankVoById({
+      // @ts-ignore
       id: questionBankId,
       needQueryQuestionList: true,
       pageSize: 200,
     });
     bank = res.data;
   } catch (e) {
-    // @ts-ignore
+    
     console.error("获取题库失败: " + e.message);
   }
 
@@ -45,12 +46,12 @@ export default async function FirstQuestionPage({ params }) {
   // 获取首题
   let question = undefined;
   try {
-    const res = await getQuestionVoByIdUsingGet({
+    const res = await getQuestionVoById({
       id: questionId,
     });
     question = res.data;
   } catch (e) {
-    // @ts-ignore
+    
     console.error("获取题目失败: " + e.message);
   }
 
@@ -61,7 +62,7 @@ export default async function FirstQuestionPage({ params }) {
   }
 
   // 定义题目菜单列表
-  // @ts-ignore
+  
   const questionMenuItemList = (bank.questionPage?.records || []).map((q) => {
     return {
       key: q.id,

@@ -9,8 +9,8 @@
 /* 导入 */
 import { Button, Form, message, Modal, Select } from "antd";
 import React, { useEffect, useState } from "react";
-import { listQuestionBankVoByPageUsingPost } from "@/api/questionBankController";
-import { batchAddQuestionsToBankUsingPost } from "@/api/questionBankQuestionController";
+import { listQuestionBankVoByPage } from "@/api/questionBankController";
+import { batchAddQuestionsToBank } from "@/api/questionBankQuestionController";
 
 /* 属性 */
 interface Props {
@@ -36,16 +36,16 @@ const BatchAddQuestionsToBankModal: React.FC<Props> = (props) => {
     const pageSize = 200;
 
     try {
-      const res = await listQuestionBankVoByPageUsingPost({
+      const res = await listQuestionBankVoByPage({
         pageSize,
         sortField: "createTime",
         sortOrder: "descend",
       });
-      // @ts-ignore
+      
       setQuestionBankList(res.data?.records ?? []);
     } catch (e) {
-      // @ts-ignore
-      message.error("获取题库列表失败: " + e.message);
+      
+      // message.error("获取题库列表失败: " + e.message);
     }
   };
 
@@ -59,7 +59,7 @@ const BatchAddQuestionsToBankModal: React.FC<Props> = (props) => {
     }
 
     try {
-      await batchAddQuestionsToBankUsingPost({
+      await batchAddQuestionsToBank({
         questionBankId,
         questionIdList,
       });
@@ -89,8 +89,8 @@ const BatchAddQuestionsToBankModal: React.FC<Props> = (props) => {
         <Form.Item label="选择所属题库" name="questionBankId">
           {/* @ts-ignore */}
           <Select
-            // @ts-ignore
-            sytle={{ width: "100%" }}
+            
+            style={{ width: "100%" }}
             options={questionBankList.map((questionBank) => {
               return {
                 label: questionBank.title,

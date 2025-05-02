@@ -8,7 +8,7 @@
 
 /* 样式 */
 import "./page.css";
-import { getQuestionBankVoByIdUsingGet } from "@/api/questionBankController";
+import { getQuestionBankVoById } from "@/api/questionBankController";
 import { Avatar, Button, Card, message } from "antd";
 import Meta from "antd/es/card/Meta";
 import Paragraph from "antd/es/typography/Paragraph";
@@ -16,22 +16,23 @@ import Title from "antd/es/typography/Title";
 import QuestionList from "@/components/QuestionList";
 
 /* 定义 */
-// @ts-ignore
+
 export default async function BankPage({ params }) {
   // 获取一个题库的信息
   const { questionBankId } = params;
   let bank = undefined;
 
   try {
-    const res = await getQuestionBankVoByIdUsingGet({
+    const res = await getQuestionBankVoById({
+      // @ts-ignore
       id: questionBankId,
       needQueryQuestionList: true,
       pageSize: 200, // TODO: 暂时全量获取
     });
     bank = res.data;
   } catch (e) {
-    // @ts-ignore
-    message.error("获取题库详情失败: " + e.message);
+    
+    // message.error("获取题库详情失败: " + e.message);
   }
 
   // 如果题库不存在
@@ -42,9 +43,9 @@ export default async function BankPage({ params }) {
 
   // 获取题库中第一题的信息
   let firstQuestionId;
-  // @ts-ignore
+  
   if (bank.questionPage?.records && bank.questionPage?.records.length > 0) {
-    // @ts-ignore
+    
     firstQuestionId = bank.questionPage?.records[0].id;
   }
 
@@ -53,7 +54,7 @@ export default async function BankPage({ params }) {
       <Title level={3}>题库详情</Title>
       <Card>
         <Meta
-          // @ts-ignore
+          
           avatar={<Avatar src={bank.picture} size={72} />}
           title={
             <Title level={4} style={{ marginBottom: 0, marginLeft: 10 }}>
@@ -84,9 +85,9 @@ export default async function BankPage({ params }) {
       <div style={{ marginBottom: 16 }} />
       {/* @ts-ignore */}
       <QuestionList
-        // @ts-ignore
+        
         questionList={bank.questionPage?.records ?? []}
-        // @ts-ignore
+        
         cardTitle={`题目列表（${bank.questionPage?.total || 0}）`}
       />
     </div>

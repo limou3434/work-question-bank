@@ -1,13 +1,13 @@
-// @ts-ignore
-/* eslint-disable */
-import request from "@/libs/transmission";
 
-/** addQuestionBankQuestion POST /api/questionBankQuestion/add */
-export async function addQuestionBankQuestionUsingPost(
+
+import request from "@/libs/request";
+
+/** 此处后端没有提供注释 POST /questionBankQuestion/add */
+export async function addQuestionBankQuestion(
   body: API.QuestionBankQuestionAddRequest,
   options?: { [key: string]: any }
 ) {
-  return request<API.BaseResponseLong_>("/api/questionBankQuestion/add", {
+  return request<API.BaseResponseLong>("/questionBankQuestion/add", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -17,30 +17,12 @@ export async function addQuestionBankQuestionUsingPost(
   });
 }
 
-/** batchAddQuestionsToBank POST /api/questionBankQuestion/add/batch */
-export async function batchAddQuestionsToBankUsingPost(
+/** 此处后端没有提供注释 POST /questionBankQuestion/add/batch */
+export async function batchAddQuestionsToBank(
   body: API.QuestionBankQuestionBatchAddRequest,
   options?: { [key: string]: any }
 ) {
-  return request<API.BaseResponseBoolean_>(
-    "/api/questionBankQuestion/add/batch",
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      data: body,
-      ...(options || {}),
-    }
-  );
-}
-
-/** deleteQuestionBankQuestion POST /api/questionBankQuestion/delete */
-export async function deleteQuestionBankQuestionUsingPost(
-  body: API.DeleteRequest,
-  options?: { [key: string]: any }
-) {
-  return request<API.BaseResponseBoolean_>("/api/questionBankQuestion/delete", {
+  return request<API.BaseResponseBoolean>("/questionBankQuestion/add/batch", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -50,14 +32,29 @@ export async function deleteQuestionBankQuestionUsingPost(
   });
 }
 
-/** getQuestionBankQuestionVOById GET /api/questionBankQuestion/get/vo */
-export async function getQuestionBankQuestionVoByIdUsingGet(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.getQuestionBankQuestionVOByIdUsingGETParams,
+/** 此处后端没有提供注释 POST /questionBankQuestion/delete */
+export async function deleteQuestionBankQuestion(
+  body: API.DeleteRequest,
   options?: { [key: string]: any }
 ) {
-  return request<API.BaseResponseQuestionBankQuestionVO_>(
-    "/api/questionBankQuestion/get/vo",
+  return request<API.BaseResponseBoolean>("/questionBankQuestion/delete", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 此处后端没有提供注释 GET /questionBankQuestion/get/vo */
+export async function getQuestionBankQuestionVoById(
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.getQuestionBankQuestionVOByIdParams,
+  options?: { [key: string]: any }
+) {
+  return request<API.BaseResponseQuestionBankQuestionVO>(
+    "/questionBankQuestion/get/vo",
     {
       method: "GET",
       params: {
@@ -68,13 +65,13 @@ export async function getQuestionBankQuestionVoByIdUsingGet(
   );
 }
 
-/** listQuestionBankQuestionByPage POST /api/questionBankQuestion/list/page */
-export async function listQuestionBankQuestionByPageUsingPost(
+/** 此处后端没有提供注释 POST /questionBankQuestion/list/page */
+export async function listQuestionBankQuestionByPage(
   body: API.QuestionBankQuestionQueryRequest,
   options?: { [key: string]: any }
 ) {
-  return request<API.BaseResponsePageQuestionBankQuestion_>(
-    "/api/questionBankQuestion/list/page",
+  return request<API.BaseResponsePageQuestionBankQuestion>(
+    "/questionBankQuestion/list/page",
     {
       method: "POST",
       headers: {
@@ -86,13 +83,13 @@ export async function listQuestionBankQuestionByPageUsingPost(
   );
 }
 
-/** listQuestionBankQuestionVOByPage POST /api/questionBankQuestion/list/page/vo */
-export async function listQuestionBankQuestionVoByPageUsingPost(
+/** 此处后端没有提供注释 POST /questionBankQuestion/list/page/vo */
+export async function listQuestionBankQuestionVoByPage(
   body: API.QuestionBankQuestionQueryRequest,
   options?: { [key: string]: any }
 ) {
-  return request<API.BaseResponsePageQuestionBankQuestionVO_>(
-    "/api/questionBankQuestion/list/page/vo",
+  return request<API.BaseResponsePageQuestionBankQuestionVO>(
+    "/questionBankQuestion/list/page/vo",
     {
       method: "POST",
       headers: {
@@ -104,13 +101,13 @@ export async function listQuestionBankQuestionVoByPageUsingPost(
   );
 }
 
-/** listMyQuestionBankQuestionVOByPage POST /api/questionBankQuestion/my/list/page/vo */
-export async function listMyQuestionBankQuestionVoByPageUsingPost(
+/** 此处后端没有提供注释 POST /questionBankQuestion/my/list/page/vo */
+export async function listMyQuestionBankQuestionVoByPage(
   body: API.QuestionBankQuestionQueryRequest,
   options?: { [key: string]: any }
 ) {
-  return request<API.BaseResponsePageQuestionBankQuestionVO_>(
-    "/api/questionBankQuestion/my/list/page/vo",
+  return request<API.BaseResponsePageQuestionBankQuestionVO>(
+    "/questionBankQuestion/my/list/page/vo",
     {
       method: "POST",
       headers: {
@@ -122,12 +119,12 @@ export async function listMyQuestionBankQuestionVoByPageUsingPost(
   );
 }
 
-/** removeQuestionBankQuestion POST /api/questionBankQuestion/remove */
-export async function removeQuestionBankQuestionUsingPost(
+/** 此处后端没有提供注释 POST /questionBankQuestion/remove */
+export async function removeQuestionBankQuestion(
   body: API.QuestionBankQuestionRemoveRequest,
   options?: { [key: string]: any }
 ) {
-  return request<API.BaseResponseBoolean_>("/api/questionBankQuestion/remove", {
+  return request<API.BaseResponseBoolean>("/questionBankQuestion/remove", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -137,13 +134,13 @@ export async function removeQuestionBankQuestionUsingPost(
   });
 }
 
-/** batchRemoveQuestionsFromBank POST /api/questionBankQuestion/remove/batch */
-export async function batchRemoveQuestionsFromBankUsingPost(
+/** 此处后端没有提供注释 POST /questionBankQuestion/remove/batch */
+export async function batchRemoveQuestionsFromBank(
   body: API.QuestionBankQuestionBatchRemoveRequest,
   options?: { [key: string]: any }
 ) {
-  return request<API.BaseResponseBoolean_>(
-    "/api/questionBankQuestion/remove/batch",
+  return request<API.BaseResponseBoolean>(
+    "/questionBankQuestion/remove/batch",
     {
       method: "POST",
       headers: {
@@ -155,12 +152,12 @@ export async function batchRemoveQuestionsFromBankUsingPost(
   );
 }
 
-/** updateQuestionBankQuestion POST /api/questionBankQuestion/update */
-export async function updateQuestionBankQuestionUsingPost(
+/** 此处后端没有提供注释 POST /questionBankQuestion/update */
+export async function updateQuestionBankQuestion(
   body: API.QuestionBankQuestionUpdateRequest,
   options?: { [key: string]: any }
 ) {
-  return request<API.BaseResponseBoolean_>("/api/questionBankQuestion/update", {
+  return request<API.BaseResponseBoolean>("/questionBankQuestion/update", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

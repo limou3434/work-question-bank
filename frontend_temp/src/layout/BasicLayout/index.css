@@ -1,0 +1,9 @@
+/* 设置内容区域的 padding */
+.ant-pro-layout .ant-pro-layout-content {
+    padding-bottom: 75px !important;
+}
+
+/* 设置页脚一直在底部 */
+.ant-pro-layout-top {
+    height: 100%;
+}

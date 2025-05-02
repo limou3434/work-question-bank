@@ -123,7 +123,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         StpUtil.login(user.getId(), DeviceUtils.getRequestDevice(request));
 
         // 使用会话来存储用户信息
-        StpUtil.getSessionByLoginId(user.getId()).set(UserConstant.USER_LOGIN_STATE, user);
+        StpUtil.getSession().set(UserConstant.USER_LOGIN_STATE, user);
 
         return this.getLoginUserVO(user);
     }

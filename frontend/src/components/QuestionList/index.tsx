@@ -32,10 +32,8 @@ const QuestionList = (props: Props) => {
         <List
           dataSource={questionList}
           renderItem={(item) => (
-            // @ts-ignore
             <List.Item extra={<TagList tagList={item.tagList} />}>
               <List.Item.Meta
-                // @ts-ignore
                 title={<Link href={`/question/${item.id}`}>{item.title}</Link>}
               />
             </List.Item>

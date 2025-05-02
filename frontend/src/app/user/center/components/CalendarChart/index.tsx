@@ -9,8 +9,8 @@ import ReactECharts from "echarts-for-react";
 import React, { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import {
-  getUserByIdUsingGet,
-  getUserSignInUsingGet,
+  getUserById,
+  getUserSignIn,
 } from "@/api/userController";
 import { message } from "antd";
 
@@ -20,14 +20,14 @@ const CalendarChart = () => {
 
   const fetchDataList = async () => {
     try {
-      const res = await getUserSignInUsingGet({
+      const res = await getUserSignIn({
         year,
       });
       // @ts-ignore
       setDataList(res.data);
     } catch (e) {
-      // @ts-ignore
-      message.error("获取刷题记录失败: ", e.message);
+      
+      // message.error("获取刷题记录失败: ", e.message);
     }
   };
 

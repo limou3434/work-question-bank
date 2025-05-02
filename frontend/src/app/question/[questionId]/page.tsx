@@ -11,23 +11,23 @@ import "./page.css";
 
 /* 引入 */
 import { message } from "antd";
-import { getQuestionVoByIdUsingGet } from "@/api/questionController";
+import { getQuestionVoById } from "@/api/questionController";
 import QuestionCard from "@/components/QuestionCard";
 
 /* 定义 */
-// @ts-ignore
+
 export default async function QuestionPage({ params }) {
   const { questionId } = params;
 
   // 获取首题
   let question = undefined;
   try {
-    const res = await getQuestionVoByIdUsingGet({
+    const res = await getQuestionVoById({
       id: questionId,
     });
     question = res.data;
   } catch (e) {
-    // @ts-ignore
+    
     console.error("获取题目详情失败: " + e.message);
   }
 

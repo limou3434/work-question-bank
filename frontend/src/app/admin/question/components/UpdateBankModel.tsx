@@ -9,13 +9,13 @@
 /* 导入 */
 import { Form, message, Modal, Select } from "antd";
 import {
-  addQuestionBankQuestionUsingPost,
-  listQuestionBankQuestionByPageUsingPost,
-  listQuestionBankQuestionVoByPageUsingPost,
-  removeQuestionBankQuestionUsingPost,
+  addQuestionBankQuestion,
+  listQuestionBankQuestionByPage,
+  listQuestionBankQuestionVoByPage,
+  removeQuestionBankQuestion,
 } from "@/api/questionBankQuestionController";
 import React, { useEffect, useState } from "react";
-import { listQuestionBankVoByPageUsingPost } from "@/api/questionBankController";
+import { listQuestionBankVoByPage } from "@/api/questionBankController";
 
 /* 属性 */
 interface Props {
@@ -39,20 +39,21 @@ const UpdateBankModal: React.FC<Props> = (props) => {
   const getCurrentQuestionBankIdList = async () => {
     try {
       // TODO: 没懂这里为什么还需要判断
-      const res = await listQuestionBankQuestionByPageUsingPost({
+      const res = await listQuestionBankQuestionByPage({
         questionId,
         pageSize: 20,
       });
+      
       // @ts-ignore
       const list = (res.data?.records ?? []).map(
-        // @ts-ignore
+        
         (item) => item.questionBankId,
       );
-      // @ts-ignore
+      
       form.setFieldsValue({ questionBankIdList: list });
     } catch (e) {
-      // @ts-ignore
-      message.error("获取题目所属题库列表标识失败: " + e.message);
+      
+      // message.error("获取题目所属题库列表标识失败: " + e.message);
     }
   };
 
@@ -67,16 +68,16 @@ const UpdateBankModal: React.FC<Props> = (props) => {
     const pageSize = 200;
 
     try {
-      const res = await listQuestionBankVoByPageUsingPost({
+      const res = await listQuestionBankVoByPage({
         pageSize,
         sortField: "createTime",
         sortOrder: "descend",
       });
-      // @ts-ignore
+      
       setQuestionBankList(res.data?.records ?? []);
     } catch (e) {
-      // @ts-ignore
-      message.error("获取题库列表失败: " + e.message);
+      
+      // message.error("获取题库列表失败: " + e.message);
     }
   };
 
@@ -98,8 +99,8 @@ const UpdateBankModal: React.FC<Props> = (props) => {
           {/* @ts-ignore */}
           <Select
             mode="multiple"
-            // @ts-ignore
-            sytle={{ width: "100%" }}
+            
+            style={{ width: "100%" }}
             options={questionBankList.map((questionBank) => {
               return {
                 label: questionBank.title,
@@ -109,7 +110,7 @@ const UpdateBankModal: React.FC<Props> = (props) => {
             onSelect={async (value) => {
               const hide = message.loading("正在更新");
               try {
-                await addQuestionBankQuestionUsingPost({
+                await addQuestionBankQuestion({
                   questionId,
                   questionBankId: value,
                 });
@@ -117,13 +118,13 @@ const UpdateBankModal: React.FC<Props> = (props) => {
                 message.success("更新绑定题库成功");
               } catch (error: any) {
                 hide();
-                message.error("更新绑定题库失败: " + error.message);
+                // message.error("更新绑定题库失败: " + error.message);
               }
             }}
             onDeselect={async (value) => {
               const hide = message.loading("正在更新");
               try {
-                await removeQuestionBankQuestionUsingPost({
+                await removeQuestionBankQuestion({
                   questionId,
                   questionBankId: value,
                 });
@@ -131,7 +132,7 @@ const UpdateBankModal: React.FC<Props> = (props) => {
                 message.success("取消绑定题库成功");
               } catch (error: any) {
                 hide();
-                message.error("取消绑定题库失败: " + error.message);
+                // message.error("取消绑定题库失败: " + error.message);
               }
             }}
           />

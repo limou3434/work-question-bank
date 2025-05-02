@@ -6,12 +6,14 @@ import cn.hutool.http.useragent.UserAgent;
 import cn.hutool.http.useragent.UserAgentUtil;
 import cn.com.edtechhub.workquestionbank.common.ErrorCode;
 import cn.com.edtechhub.workquestionbank.exception.ThrowUtils;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.http.HttpServletRequest;
 
 /**
  * 设备工具类
  */
+@Slf4j
 public class DeviceUtils {
 
     /**
@@ -34,6 +36,8 @@ public class DeviceUtils {
         } else if (userAgent.isMobile()) { // 是否为手机
             device = "mobile";
         }
+
+        log.debug("检测到登陆设备为 {}", device);
 
         return device;
     }

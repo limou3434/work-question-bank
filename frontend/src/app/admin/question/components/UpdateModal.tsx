@@ -6,7 +6,7 @@
 /* 导入 */
 import { ProColumns, ProTable } from "@ant-design/pro-components";
 import React from "react";
-import { updateQuestionUsingPost } from "@/api/questionController";
+import { updateQuestion } from "@/api/questionController";
 import { message, Modal } from "antd";
 
 /* 属性 */
@@ -23,13 +23,13 @@ interface Props {
 const handleUpdate = async (fields: API.QuestionUpdateRequest) => {
   const hide = message.loading("正在更新");
   try {
-    await updateQuestionUsingPost(fields);
+    await updateQuestion(fields);
     hide();
     message.success("更新成功");
     return true;
   } catch (error: any) {
     hide();
-    message.error("更新失败: " + error.message);
+    // message.error("更新失败: " + error.message);
     return false;
   }
 };
@@ -45,7 +45,7 @@ const UpdateModal: React.FC<Props> = (props) => {
   // 表单转换(使得后端返回的字符可以被渲染为标签)
   const initValues = { ...oldData };
   if (oldData.tags) {
-    // @ts-ignore
+    
     initValues.tags = JSON.parse(oldData.tags) || [];
   }
 

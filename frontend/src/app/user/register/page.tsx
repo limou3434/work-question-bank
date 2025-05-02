@@ -12,7 +12,7 @@ import { LoginForm, ProFormText } from "@ant-design/pro-components";
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { userRegisterUsingPost } from "@/api/userController";
+import { userRegister } from "@/api/userController";
 import { message } from "antd";
 import { ProForm } from "@ant-design/pro-form/lib";
 import { useRouter } from "next/navigation";
@@ -30,15 +30,15 @@ const UserRegisterPage: React.FC = () => {
     // TODO: 拦截前端部分不正确的请求, 减轻后端压力
     // 提交登入表单
     try {
-      const res = await userRegisterUsingPost(values);
+      const res = await userRegister(values);
       if (res.data) {
         message.success("注册成功"); // 提示登入成功
         router.replace("/user/login"); // 跳转页面
         form.resetFields(); // 重置表单
       }
     } catch (e) {
-      // @ts-ignore
-      message.error("注册失败: " + e.message); // 提示登入失败
+      
+      // message.error("注册失败: " + e.message); // 提示登入失败
     }
   };
 

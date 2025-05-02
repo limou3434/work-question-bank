@@ -6,7 +6,7 @@
 /* 导入 */
 import { ProColumns, ProTable } from "@ant-design/pro-components";
 import React from "react";
-import { updateQuestionBankUsingPost } from "@/api/questionBankController";
+import { updateQuestionBank } from "@/api/questionBankController";
 import { message, Modal } from "antd";
 
 /* 属性 */
@@ -23,13 +23,13 @@ interface Props {
 const handleUpdate = async (fields: API.QuestionBankUpdateRequest) => {
   const hide = message.loading("正在更新");
   try {
-    await updateQuestionBankUsingPost(fields);
+    await updateQuestionBank(fields);
     hide();
     message.success("更新成功");
     return true;
   } catch (error: any) {
     hide();
-    message.error("更新失败: " + error.message);
+    // message.error("更新失败: " + error.message);
     return false;
   }
 };

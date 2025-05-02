@@ -1,6 +1,6 @@
 /* 引入 */
 import { useEffect, useState } from "react";
-import { addUserSignInUsingPost } from "@/api/userController";
+import { addUserSignIn } from "@/api/userController";
 import { message } from "antd";
 
 /* 实现 */
@@ -10,7 +10,7 @@ const useAddUserSignInRecord = () => {
   const doFetch = async () => {
     setLoading(true);
     try {
-      const res = await addUserSignInUsingPost({});
+      const res = await addUserSignIn({});
     } catch (e) {
       // @ts-ignore
       message.error("今日签到失败: ", e.message);

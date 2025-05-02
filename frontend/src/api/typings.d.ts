@@ -1,528 +1,521 @@
 declare namespace API {
-  type BaseResponseBoolean_ = {
-    code?: number;
-    data?: boolean;
-    message?: string;
-  };
+    type BaseResponseBoolean = {
+        code?: number;
+        data?: boolean;
+        message?: string;
+    };
 
-  type BaseResponseListInt_ = {
-    code?: number;
-    data?: number[];
-    message?: string;
-  };
+    type BaseResponseListInteger = {
+        code?: number;
+        data?: number[];
+        message?: string;
+    };
 
-  type BaseResponseLoginUserVO_ = {
-    code?: number;
-    data?: LoginUserVO;
-    message?: string;
-  };
+    type BaseResponseLoginUserVO = {
+        code?: number;
+        data?: LoginUserVO;
+        message?: string;
+    };
 
-  type BaseResponseLong_ = {
-    code?: number;
-    data?: number;
-    message?: string;
-  };
+    type BaseResponseLong = {
+        code?: number;
+        data?: number;
+        message?: string;
+    };
 
-  type BaseResponsePageQuestion_ = {
-    code?: number;
-    data?: PageQuestion_;
-    message?: string;
-  };
+    type BaseResponsePageQuestion = {
+        code?: number;
+        data?: PageQuestion;
+        message?: string;
+    };
 
-  type BaseResponsePageQuestionBank_ = {
-    code?: number;
-    data?: PageQuestionBank_;
-    message?: string;
-  };
+    type BaseResponsePageQuestionBank = {
+        code?: number;
+        data?: PageQuestionBank;
+        message?: string;
+    };
 
-  type BaseResponsePageQuestionBankQuestion_ = {
-    code?: number;
-    data?: PageQuestionBankQuestion_;
-    message?: string;
-  };
+    type BaseResponsePageQuestionBankQuestion = {
+        code?: number;
+        data?: PageQuestionBankQuestion;
+        message?: string;
+    };
 
-  type BaseResponsePageQuestionBankQuestionVO_ = {
-    code?: number;
-    data?: PageQuestionBankQuestionVO_;
-    message?: string;
-  };
+    type BaseResponsePageQuestionBankQuestionVO = {
+        code?: number;
+        data?: PageQuestionBankQuestionVO;
+        message?: string;
+    };
 
-  type BaseResponsePageQuestionBankVO_ = {
-    code?: number;
-    data?: PageQuestionBankVO_;
-    message?: string;
-  };
+    type BaseResponsePageQuestionBankVO = {
+        records: any[];
+        code?: number;
+        data?: PageQuestionBankVO;
+        message?: string;
+    };
 
-  type BaseResponsePageQuestionVO_ = {
-    code?: number;
-    data?: PageQuestionVO_;
-    message?: string;
-  };
+    type BaseResponsePageQuestionVO = {
+        total: number;
+        records: any[];
+        code?: number;
+        data?: PageQuestionVO;
+        message?: string;
+    };
 
-  type BaseResponsePageUser_ = {
-    code?: number;
-    data?: PageUser_;
-    message?: string;
-  };
+    type BaseResponsePageUser = {
+        code?: number;
+        data?: PageUser;
+        message?: string;
+    };
 
-  type BaseResponsePageUserVO_ = {
-    code?: number;
-    data?: PageUserVO_;
-    message?: string;
-  };
+    type BaseResponsePageUserVO = {
+        code?: number;
+        data?: PageUserVO;
+        message?: string;
+    };
 
-  type BaseResponseQuestionBankQuestionVO_ = {
-    code?: number;
-    data?: QuestionBankQuestionVO;
-    message?: string;
-  };
+    type BaseResponseQuestionBankQuestionVO = {
+        code?: number;
+        data?: QuestionBankQuestionVO;
+        message?: string;
+    };
 
-  type BaseResponseQuestionBankVO_ = {
-    code?: number;
-    data?: QuestionBankVO;
-    message?: string;
-  };
+    type BaseResponseQuestionBankVO = {
+        code?: number;
+        data?: QuestionBankVO;
+        message?: string;
+    };
 
-  type BaseResponseQuestionVO_ = {
-    code?: number;
-    data?: QuestionVO;
-    message?: string;
-  };
+    type BaseResponseQuestionVO = {
+        code?: number;
+        data?: QuestionVO;
+        message?: string;
+    };
 
-  type BaseResponseUser_ = {
-    code?: number;
-    data?: User;
-    message?: string;
-  };
+    type BaseResponseUser = {
+        code?: number;
+        data?: User;
+        message?: string;
+    };
 
-  type BaseResponseUserVO_ = {
-    code?: number;
-    data?: UserVO;
-    message?: string;
-  };
+    type BaseResponseUserVO = {
+        code?: number;
+        data?: UserVO;
+        message?: string;
+    };
 
-  type DeleteRequest = {
-    id?: number;
-  };
+    type DeleteRequest = {
+        id?: number;
+    };
 
-  type getQuestionBankQuestionVOByIdUsingGETParams = {
-    /** id */
-    id?: number;
-  };
+    type getQuestionBankQuestionVOByIdParams = {
+        id: number;
+    };
 
-  type getQuestionBankVOByIdUsingGETParams = {
-    current?: number;
-    description?: string;
-    id?: number;
-    needQueryQuestionList?: boolean;
-    notId?: number;
-    pageSize?: number;
-    picture?: string;
-    searchText?: string;
-    sortField?: string;
-    sortOrder?: string;
-    title?: string;
-    userId?: number;
-  };
+    type getQuestionBankVOByIdParams = {
+        questionBankQueryRequest: QuestionBankQueryRequest;
+    };
 
-  type getQuestionVOByIdUsingGETParams = {
-    /** id */
-    id?: number;
-  };
+    type getQuestionVOByIdParams = {
+        id: number;
+    };
 
-  type getUserByIdUsingGETParams = {
-    /** id */
-    id?: number;
-  };
+    type getUserByIdParams = {
+        id: number;
+    };
 
-  type getUserSignInUsingGETParams = {
-    /** year */
-    year?: number;
-  };
+    type getUserSignInParams = {
+        year: number;
+    };
 
-  type getUserVOByIdUsingGETParams = {
-    /** id */
-    id?: number;
-  };
+    type getUserVOByIdParams = {
+        id: number;
+    };
 
-  type LoginUserVO = {
-    createTime?: string;
-    id?: number;
-    updateTime?: string;
-    userAvatar?: string;
-    userName?: string;
-    userProfile?: string;
-    userRole?: string;
-  };
+    type LoginUserVO = {
+        id?: number;
+        userName?: string;
+        userAvatar?: string;
+        userProfile?: string;
+        userRole?: string;
+        createTime?: string;
+        updateTime?: string;
+    };
 
-  type OrderItem = {
-    asc?: boolean;
-    column?: string;
-  };
+    type OrderItem = {
+        column?: string;
+        asc?: boolean;
+    };
 
-  type PageQuestion_ = {
-    countId?: string;
-    current?: number;
-    maxLimit?: number;
-    optimizeCountSql?: boolean;
-    orders?: OrderItem[];
-    pages?: number;
-    records?: Question[];
-    searchCount?: boolean;
-    size?: number;
-    total?: number;
-  };
+    type PageQuestion = {
+        records?: Question[];
+        total?: number;
+        size?: number;
+        current?: number;
+        orders?: OrderItem[];
+        optimizeCountSql?: PageQuestion;
+        searchCount?: PageQuestion;
+        optimizeJoinOfCountSql?: boolean;
+        maxLimit?: number;
+        countId?: string;
+        pages?: number;
+    };
 
-  type PageQuestionBank_ = {
-    countId?: string;
-    current?: number;
-    maxLimit?: number;
-    optimizeCountSql?: boolean;
-    orders?: OrderItem[];
-    pages?: number;
-    records?: QuestionBank[];
-    searchCount?: boolean;
-    size?: number;
-    total?: number;
-  };
+    type PageQuestionBank = {
+        records?: QuestionBank[];
+        total?: number;
+        size?: number;
+        current?: number;
+        orders?: OrderItem[];
+        optimizeCountSql?: PageQuestionBank;
+        searchCount?: PageQuestionBank;
+        optimizeJoinOfCountSql?: boolean;
+        maxLimit?: number;
+        countId?: string;
+        pages?: number;
+    };
 
-  type PageQuestionBankQuestion_ = {
-    countId?: string;
-    current?: number;
-    maxLimit?: number;
-    optimizeCountSql?: boolean;
-    orders?: OrderItem[];
-    pages?: number;
-    records?: QuestionBankQuestion[];
-    searchCount?: boolean;
-    size?: number;
-    total?: number;
-  };
+    type PageQuestionBankQuestion = {
+        records?: QuestionBankQuestion[];
+        total?: number;
+        size?: number;
+        current?: number;
+        orders?: OrderItem[];
+        optimizeCountSql?: PageQuestionBankQuestion;
+        searchCount?: PageQuestionBankQuestion;
+        optimizeJoinOfCountSql?: boolean;
+        maxLimit?: number;
+        countId?: string;
+        pages?: number;
+    };
 
-  type PageQuestionBankQuestionVO_ = {
-    countId?: string;
-    current?: number;
-    maxLimit?: number;
-    optimizeCountSql?: boolean;
-    orders?: OrderItem[];
-    pages?: number;
-    records?: QuestionBankQuestionVO[];
-    searchCount?: boolean;
-    size?: number;
-    total?: number;
-  };
+    type PageQuestionBankQuestionVO = {
+        records?: QuestionBankQuestionVO[];
+        total?: number;
+        size?: number;
+        current?: number;
+        orders?: OrderItem[];
+        optimizeCountSql?: PageQuestionBankQuestionVO;
+        searchCount?: PageQuestionBankQuestionVO;
+        optimizeJoinOfCountSql?: boolean;
+        maxLimit?: number;
+        countId?: string;
+        pages?: number;
+    };
 
-  type PageQuestionBankVO_ = {
-    countId?: string;
-    current?: number;
-    maxLimit?: number;
-    optimizeCountSql?: boolean;
-    orders?: OrderItem[];
-    pages?: number;
-    records?: QuestionBankVO[];
-    searchCount?: boolean;
-    size?: number;
-    total?: number;
-  };
+    type PageQuestionBankVO = {
+        records?: QuestionBankVO[];
+        total?: number;
+        size?: number;
+        current?: number;
+        orders?: OrderItem[];
+        optimizeCountSql?: PageQuestionBankVO;
+        searchCount?: PageQuestionBankVO;
+        optimizeJoinOfCountSql?: boolean;
+        maxLimit?: number;
+        countId?: string;
+        pages?: number;
+    };
 
-  type PageQuestionVO_ = {
-    countId?: string;
-    current?: number;
-    maxLimit?: number;
-    optimizeCountSql?: boolean;
-    orders?: OrderItem[];
-    pages?: number;
-    records?: QuestionVO[];
-    searchCount?: boolean;
-    size?: number;
-    total?: number;
-  };
+    type PageQuestionVO = {
+        records?: QuestionVO[];
+        total?: number;
+        size?: number;
+        current?: number;
+        orders?: OrderItem[];
+        optimizeCountSql?: PageQuestionVO;
+        searchCount?: PageQuestionVO;
+        optimizeJoinOfCountSql?: boolean;
+        maxLimit?: number;
+        countId?: string;
+        pages?: number;
+    };
 
-  type PageUser_ = {
-    countId?: string;
-    current?: number;
-    maxLimit?: number;
-    optimizeCountSql?: boolean;
-    orders?: OrderItem[];
-    pages?: number;
-    records?: User[];
-    searchCount?: boolean;
-    size?: number;
-    total?: number;
-  };
+    type PageUser = {
+        records?: User[];
+        total?: number;
+        size?: number;
+        current?: number;
+        orders?: OrderItem[];
+        optimizeCountSql?: PageUser;
+        searchCount?: PageUser;
+        optimizeJoinOfCountSql?: boolean;
+        maxLimit?: number;
+        countId?: string;
+        pages?: number;
+    };
 
-  type PageUserVO_ = {
-    countId?: string;
-    current?: number;
-    maxLimit?: number;
-    optimizeCountSql?: boolean;
-    orders?: OrderItem[];
-    pages?: number;
-    records?: UserVO[];
-    searchCount?: boolean;
-    size?: number;
-    total?: number;
-  };
+    type PageUserVO = {
+        records?: UserVO[];
+        total?: number;
+        size?: number;
+        current?: number;
+        orders?: OrderItem[];
+        optimizeCountSql?: PageUserVO;
+        searchCount?: PageUserVO;
+        optimizeJoinOfCountSql?: boolean;
+        maxLimit?: number;
+        countId?: string;
+        pages?: number;
+    };
 
-  type Question = {
-    answer?: string;
-    content?: string;
-    createTime?: string;
-    editTime?: string;
-    id?: number;
-    isDelete?: number;
-    tags?: string;
-    title?: string;
-    updateTime?: string;
-    userId?: number;
-  };
+    type Question = {
+        id?: number;
+        title?: string;
+        content?: string;
+        tags?: string;
+        answer?: string;
+        userId?: number;
+        editTime?: string;
+        createTime?: string;
+        updateTime?: string;
+        isDelete?: number;
+    };
 
-  type QuestionAddRequest = {
-    answer?: string;
-    content?: string;
-    tags?: string[];
-    title?: string;
-  };
+    type QuestionAddRequest = {
+        title?: string;
+        content?: string;
+        tags?: string[];
+        answer?: string;
+    };
 
-  type QuestionBank = {
-    createTime?: string;
-    description?: string;
-    editTime?: string;
-    id?: number;
-    isDelete?: number;
-    picture?: string;
-    title?: string;
-    updateTime?: string;
-    userId?: number;
-  };
+    type QuestionBank = {
+        id?: number;
+        title?: string;
+        description?: string;
+        picture?: string;
+        userId?: number;
+        editTime?: string;
+        createTime?: string;
+        updateTime?: string;
+        isDelete?: number;
+    };
 
-  type QuestionBankAddRequest = {
-    description?: string;
-    picture?: string;
-    title?: string;
-  };
+    type QuestionBankAddRequest = {
+        title?: string;
+        description?: string;
+        picture?: string;
+    };
 
-  type QuestionBankEditRequest = {
-    description?: string;
-    id?: number;
-    picture?: string;
-    title?: string;
-  };
+    type QuestionBankEditRequest = {
+        id?: number;
+        title?: string;
+        description?: string;
+        picture?: string;
+    };
 
-  type QuestionBankQueryRequest = {
-    current?: number;
-    description?: string;
-    id?: number;
-    needQueryQuestionList?: boolean;
-    notId?: number;
-    pageSize?: number;
-    picture?: string;
-    searchText?: string;
-    sortField?: string;
-    sortOrder?: string;
-    title?: string;
-    userId?: number;
-  };
+    type QuestionBankQueryRequest = {
+        current?: number;
+        pageSize?: number;
+        sortField?: string;
+        sortOrder?: string;
+        id?: number;
+        notId?: number;
+        searchText?: string;
+        title?: string;
+        description?: string;
+        picture?: string;
+        userId?: number;
+        needQueryQuestionList?: boolean;
+    };
 
-  type QuestionBankQuestion = {
-    createTime?: string;
-    id?: number;
-    questionBankId?: number;
-    questionId?: number;
-    updateTime?: string;
-    userId?: number;
-  };
+    type QuestionBankQuestion = {
+        id?: number;
+        questionBankId?: number;
+        questionId?: number;
+        userId?: number;
+        createTime?: string;
+        updateTime?: string;
+    };
 
-  type QuestionBankQuestionAddRequest = {
-    questionBankId?: number;
-    questionId?: number;
-  };
+    type QuestionBankQuestionAddRequest = {
+        questionBankId?: number;
+        questionId?: number;
+    };
 
-  type QuestionBankQuestionBatchAddRequest = {
-    questionBankId?: number;
-    questionIdList?: number[];
-  };
+    type QuestionBankQuestionBatchAddRequest = {
+        questionBankId?: number;
+        questionIdList?: number[];
+    };
 
-  type QuestionBankQuestionBatchRemoveRequest = {
-    questionBankId?: number;
-    questionIdList?: number[];
-  };
+    type QuestionBankQuestionBatchRemoveRequest = {
+        questionBankId?: number;
+        questionIdList?: number[];
+    };
 
-  type QuestionBankQuestionQueryRequest = {
-    current?: number;
-    id?: number;
-    notId?: number;
-    pageSize?: number;
-    questionBankId?: number;
-    questionId?: number;
-    sortField?: string;
-    sortOrder?: string;
-    userId?: number;
-  };
+    type QuestionBankQuestionQueryRequest = {
+        current?: number;
+        pageSize?: number;
+        sortField?: string;
+        sortOrder?: string;
+        id?: number;
+        notId?: number;
+        questionBankId?: number;
+        questionId?: number;
+        userId?: number;
+    };
 
-  type QuestionBankQuestionRemoveRequest = {
-    questionBankId?: number;
-    questionId?: number;
-  };
+    type QuestionBankQuestionRemoveRequest = {
+        questionBankId?: number;
+        questionId?: number;
+    };
 
-  type QuestionBankQuestionUpdateRequest = {
-    id?: number;
-    questionBankId?: number;
-    questionId?: number;
-  };
+    type QuestionBankQuestionUpdateRequest = {
+        id?: number;
+        questionBankId?: number;
+        questionId?: number;
+    };
 
-  type QuestionBankQuestionVO = {
-    createTime?: string;
-    id?: number;
-    questionBankId?: number;
-    questionId?: number;
-    tagList?: string[];
-    updateTime?: string;
-    user?: UserVO;
-    userId?: number;
-  };
+    type QuestionBankQuestionVO = {
+        id?: number;
+        questionBankId?: number;
+        questionId?: number;
+        userId?: number;
+        createTime?: string;
+        updateTime?: string;
+        tagList?: string[];
+        user?: UserVO;
+    };
 
-  type QuestionBankUpdateRequest = {
-    description?: string;
-    id?: number;
-    picture?: string;
-    title?: string;
-  };
+    type QuestionBankUpdateRequest = {
+        id?: number;
+        title?: string;
+        description?: string;
+        picture?: string;
+    };
 
-  type QuestionBankVO = {
-    createTime?: string;
-    description?: string;
-    id?: number;
-    picture?: string;
-    questionPage?: PageQuestionVO_;
-    title?: string;
-    updateTime?: string;
-    user?: UserVO;
-    userId?: number;
-  };
+    type QuestionBankVO = {
+        answer: string;
+        content: string;
+        tagList: string[];
+        id?: number;
+        title?: string;
+        description?: string;
+        picture?: string;
+        userId?: number;
+        createTime?: string;
+        updateTime?: string;
+        user?: UserVO;
+        questionPage?: PageQuestionVO;
+    };
 
-  type QuestionBatchDeleteRequest = {
-    questionIdList?: number[];
-  };
+    type QuestionBatchDeleteRequest = {
+        questionIdList?: number[];
+    };
 
-  type QuestionEditRequest = {
-    answer?: string;
-    content?: string;
-    id?: number;
-    tags?: string[];
-    title?: string;
-  };
+    type QuestionEditRequest = {
+        id?: number;
+        title?: string;
+        content?: string;
+        tags?: string[];
+        answer?: string;
+    };
 
-  type QuestionQueryRequest = {
-    answer?: string;
-    content?: string;
-    current?: number;
-    id?: number;
-    notId?: number;
-    pageSize?: number;
-    questionBankId?: number;
-    searchText?: string;
-    sortField?: string;
-    sortOrder?: string;
-    tags?: string[];
-    title?: string;
-    userId?: number;
-  };
+    type QuestionQueryRequest = {
+        current?: number;
+        pageSize?: number;
+        sortField?: string;
+        sortOrder?: string;
+        id?: number;
+        notId?: number;
+        searchText?: string;
+        title?: string;
+        content?: string;
+        tags?: string[];
+        answer?: string;
+        questionBankId?: number;
+        userId?: number;
+    };
 
-  type QuestionUpdateRequest = {
-    answer?: string;
-    content?: string;
-    id?: number;
-    tags?: string[];
-    title?: string;
-  };
+    type QuestionUpdateRequest = {
+        id?: number;
+        title?: string;
+        content?: string;
+        tags?: string[];
+        answer?: string;
+    };
 
-  type QuestionVO = {
-    answer?: string;
-    content?: string;
-    createTime?: string;
-    id?: number;
-    tagList?: string[];
-    title?: string;
-    updateTime?: string;
-    user?: UserVO;
-    userId?: number;
-  };
+    type QuestionVO = {
+        id?: number;
+        title?: string;
+        content?: string;
+        answer?: string;
+        userId?: number;
+        createTime?: string;
+        updateTime?: string;
+        tagList?: string[];
+        user?: UserVO;
+    };
 
-  type User = {
-    createTime?: string;
-    editTime?: string;
-    id?: number;
-    isDelete?: number;
-    mpOpenId?: string;
-    unionId?: string;
-    updateTime?: string;
-    userAccount?: string;
-    userAvatar?: string;
-    userName?: string;
-    userPassword?: string;
-    userProfile?: string;
-    userRole?: string;
-  };
+    type User = {
+        id?: number;
+        userAccount?: string;
+        userPassword?: string;
+        unionId?: string;
+        mpOpenId?: string;
+        userName?: string;
+        userAvatar?: string;
+        userProfile?: string;
+        userRole?: string;
+        editTime?: string;
+        createTime?: string;
+        updateTime?: string;
+        isDelete?: number;
+    };
 
-  type UserAddRequest = {
-    userAccount?: string;
-    userAvatar?: string;
-    userName?: string;
-    userProfile?: string;
-    userRole?: string;
-  };
+    type UserAddRequest = {
+        userName?: string;
+        userAccount?: string;
+        userAvatar?: string;
+        userProfile?: string;
+        userRole?: string;
+    };
 
-  type userLoginByWxOpenUsingGETParams = {
-    /** code */
-    code: string;
-  };
+    type UserLoginRequest = {
+        userAccount?: string;
+        userPassword?: string;
+    };
 
-  type UserLoginRequest = {
-    userAccount?: string;
-    userPassword?: string;
-  };
+    type UserQueryRequest = {
+        current?: number;
+        pageSize?: number;
+        sortField?: string;
+        sortOrder?: string;
+        id?: number;
+        unionId?: string;
+        mpOpenId?: string;
+        userName?: string;
+        userAccount?: string;
+        userProfile?: string;
+        userRole?: string;
+    };
 
-  type UserQueryRequest = {
-    current?: number;
-    id?: number;
-    mpOpenId?: string;
-    pageSize?: number;
-    sortField?: string;
-    sortOrder?: string;
-    unionId?: string;
-    userAccount?: string;
-    userName?: string;
-    userProfile?: string;
-    userRole?: string;
-  };
+    type UserRegisterRequest = {
+        userAccount?: string;
+        userPassword?: string;
+        checkPassword?: string;
+    };
 
-  type UserRegisterRequest = {
-    checkPassword?: string;
-    userAccount?: string;
-    userPassword?: string;
-  };
+    type UserUpdateMyRequest = {
+        userName?: string;
+        userAvatar?: string;
+        userProfile?: string;
+    };
 
-  type UserUpdateMyRequest = {
-    userAvatar?: string;
-    userName?: string;
-    userProfile?: string;
-  };
+    type UserUpdateRequest = {
+        id?: number;
+        userName?: string;
+        userAvatar?: string;
+        userProfile?: string;
+        userRole?: string;
+    };
 
-  type UserUpdateRequest = {
-    id?: number;
-    userAvatar?: string;
-    userName?: string;
-    userProfile?: string;
-    userRole?: string;
-  };
-
-  type UserVO = {
-    createTime?: string;
-    id?: number;
-    userAvatar?: string;
-    userName?: string;
-    userProfile?: string;
-    userRole?: string;
-  };
+    type UserVO = {
+        id?: number;
+        userName?: string;
+        userAvatar?: string;
+        userProfile?: string;
+        userRole?: string;
+        createTime?: string;
+    };
 }

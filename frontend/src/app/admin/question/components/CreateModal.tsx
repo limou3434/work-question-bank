@@ -7,7 +7,7 @@
 import { ProColumns, ProTable } from "@ant-design/pro-components";
 import { message, Modal } from "antd";
 import React from "react";
-import { addQuestionUsingPost } from "@/api/questionController";
+import { addQuestion } from "@/api/questionController";
 
 /* 属性 */
 interface Props {
@@ -22,13 +22,13 @@ interface Props {
 const handleAdd = async (fields: API.QuestionAddRequest) => {
   const hide = message.loading("正在添加");
   try {
-    await addQuestionUsingPost(fields);
+    await addQuestion(fields);
     hide();
     message.success("创建成功");
     return true;
   } catch (error: any) {
     hide();
-    message.error("创建失败: " + error.message);
+    // message.error("创建失败: " + error.message);
     return false;
   }
 };

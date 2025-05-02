@@ -11,7 +11,7 @@ import { Card } from "antd";
 import Title from "antd/es/typography/Title";
 import TagList from "@/components/TagList";
 import MdViewer from "@/components/MdViewer";
-import useAddUserSignInRecord from "@/hooks/useAddUserSignInRecord";
+import useAddUserSignInRecord from "../../../hooks/useAddUserSignInRecord";
 
 /* 属性 */
 interface Props {
@@ -32,15 +32,12 @@ const QuestionCard = (props: Props) => {
         <Title level={1} style={{ fontSize: 32 }}>
           {question.title}
         </Title>
-        {/* @ts-ignore */}
         <TagList tagList={question.tagList} />
         <div style={{ marginBottom: 16 }} />
-        {/* @ts-ignore */}
         <MdViewer value={question.content} />
       </Card>
       <div style={{ marginBottom: 16 }} />
       <Card title="参考答案">
-        {/* @ts-ignore */}
         <MdViewer value={question.answer} />
       </Card>
     </div>

@@ -18,8 +18,8 @@ import { PageContainer, ProTable } from "@ant-design/pro-components";
 import { Button, message, Space, Typography } from "antd";
 import React, { useRef, useState } from "react";
 import {
-  deleteQuestionBankUsingPost,
-  listQuestionBankByPageUsingPost,
+  deleteQuestionBank,
+  listQuestionBankByPage,
 } from "@/api/questionBankController";
 
 /* 定义 */
@@ -32,7 +32,7 @@ const QuestionBankAdminPage: React.FC = () => {
   const [updateModalVisible, setUpdateModalVisible] = useState<boolean>(false);
 
   // 引用表格
-  const actionRef = useRef<ActionType>();
+  const actionRef = useRef<ActionType>(null);
 
   // 当前题库的数据
   const [currentRow, setCurrentRow] = useState<API.QuestionBank>();
@@ -42,7 +42,7 @@ const QuestionBankAdminPage: React.FC = () => {
     const hide = message.loading("正在删除");
     if (!row) return true;
     try {
-      await deleteQuestionBankUsingPost({
+      await deleteQuestionBank({
         id: row.id as any,
       });
       hide();
@@ -51,7 +51,7 @@ const QuestionBankAdminPage: React.FC = () => {
       return true;
     } catch (error: any) {
       hide();
-      message.error("删除失败: " + error.message);
+      // message.error("删除失败: " + error.message);
       return false;
     }
   };
@@ -157,8 +157,8 @@ const QuestionBankAdminPage: React.FC = () => {
             const sortField = Object.keys(sort)?.[0];
             const sortOrder = sort?.[sortField] ?? undefined;
             // 获取表格内的题库数据
-            // @ts-ignore
-            const { data, code } = await listQuestionBankByPageUsingPost({
+            
+            const { data } = await listQuestionBankByPage({
               ...params,
               sortField,
               sortOrder,
@@ -166,9 +166,9 @@ const QuestionBankAdminPage: React.FC = () => {
             } as API.QuestionBankQueryRequest);
 
             return {
-              success: code === 0,
               // @ts-ignore
               data: data?.records || [],
+
               // @ts-ignore
               total: Number(data?.total) || 0,
             };

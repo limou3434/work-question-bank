@@ -1,13 +1,13 @@
-// @ts-ignore
-/* eslint-disable */
-import request from "@/libs/transmission";
 
-/** addQuestion POST /api/question/add */
-export async function addQuestionUsingPost(
+
+import request from "@/libs/request";
+
+/** 此处后端没有提供注释 POST /question/add */
+export async function addQuestion(
   body: API.QuestionAddRequest,
   options?: { [key: string]: any }
 ) {
-  return request<API.BaseResponseLong_>("/api/question/add", {
+  return request<API.BaseResponseLong>("/question/add", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -17,12 +17,12 @@ export async function addQuestionUsingPost(
   });
 }
 
-/** deleteQuestion POST /api/question/delete */
-export async function deleteQuestionUsingPost(
+/** 此处后端没有提供注释 POST /question/delete */
+export async function deleteQuestion(
   body: API.DeleteRequest,
   options?: { [key: string]: any }
 ) {
-  return request<API.BaseResponseBoolean_>("/api/question/delete", {
+  return request<API.BaseResponseBoolean>("/question/delete", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -32,12 +32,12 @@ export async function deleteQuestionUsingPost(
   });
 }
 
-/** batchDeleteQuestions POST /api/question/delete/batch */
-export async function batchDeleteQuestionsUsingPost(
+/** 此处后端没有提供注释 POST /question/delete/batch */
+export async function batchDeleteQuestions(
   body: API.QuestionBatchDeleteRequest,
   options?: { [key: string]: any }
 ) {
-  return request<API.BaseResponseBoolean_>("/api/question/delete/batch", {
+  return request<API.BaseResponseBoolean>("/question/delete/batch", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -47,12 +47,12 @@ export async function batchDeleteQuestionsUsingPost(
   });
 }
 
-/** editQuestion POST /api/question/edit */
-export async function editQuestionUsingPost(
+/** 此处后端没有提供注释 POST /question/edit */
+export async function editQuestion(
   body: API.QuestionEditRequest,
   options?: { [key: string]: any }
 ) {
-  return request<API.BaseResponseBoolean_>("/api/question/edit", {
+  return request<API.BaseResponseBoolean>("/question/edit", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -62,13 +62,13 @@ export async function editQuestionUsingPost(
   });
 }
 
-/** getQuestionVOById GET /api/question/get/vo */
-export async function getQuestionVoByIdUsingGet(
+/** 此处后端没有提供注释 GET /question/get/vo */
+export async function getQuestionVoById(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.getQuestionVOByIdUsingGETParams,
+  params: API.getQuestionVOByIdParams,
   options?: { [key: string]: any }
 ) {
-  return request<API.BaseResponseQuestionVO_>("/api/question/get/vo", {
+  return request<API.BaseResponseQuestionVO>("/question/get/vo", {
     method: "GET",
     params: {
       ...params,
@@ -77,12 +77,12 @@ export async function getQuestionVoByIdUsingGet(
   });
 }
 
-/** listQuestionByPage POST /api/question/list/page */
-export async function listQuestionByPageUsingPost(
+/** 此处后端没有提供注释 POST /question/list/page */
+export async function listQuestionByPage(
   body: API.QuestionQueryRequest,
   options?: { [key: string]: any }
 ) {
-  return request<API.BaseResponsePageQuestion_>("/api/question/list/page", {
+  return request<API.BaseResponsePageQuestion>("/question/list/page", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -92,66 +92,57 @@ export async function listQuestionByPageUsingPost(
   });
 }
 
-/** listQuestionVOByPage POST /api/question/list/page/vo */
-export async function listQuestionVoByPageUsingPost(
+/** 此处后端没有提供注释 POST /question/list/page/vo */
+export async function listQuestionVoByPage(
   body: API.QuestionQueryRequest,
   options?: { [key: string]: any }
 ) {
-  return request<API.BaseResponsePageQuestionVO_>(
-    "/api/question/list/page/vo",
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      data: body,
-      ...(options || {}),
-    }
-  );
+  return request<API.BaseResponsePageQuestionVO>("/question/list/page/vo", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    data: body,
+    ...(options || {}),
+  });
 }
 
-/** listMyQuestionVOByPage POST /api/question/my/list/page/vo */
-export async function listMyQuestionVoByPageUsingPost(
+/** 此处后端没有提供注释 POST /question/my/list/page/vo */
+export async function listMyQuestionVoByPage(
   body: API.QuestionQueryRequest,
   options?: { [key: string]: any }
 ) {
-  return request<API.BaseResponsePageQuestionVO_>(
-    "/api/question/my/list/page/vo",
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      data: body,
-      ...(options || {}),
-    }
-  );
+  return request<API.BaseResponsePageQuestionVO>("/question/my/list/page/vo", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    data: body,
+    ...(options || {}),
+  });
 }
 
-/** searchQuestionVOByPage POST /api/question/search/page/vo */
-export async function searchQuestionVoByPageUsingPost(
+/** 此处后端没有提供注释 POST /question/search/page/vo */
+export async function searchQuestionVoByPage(
   body: API.QuestionQueryRequest,
   options?: { [key: string]: any }
 ) {
-  return request<API.BaseResponsePageQuestionVO_>(
-    "/api/question/search/page/vo",
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      data: body,
-      ...(options || {}),
-    }
-  );
+  return request<API.BaseResponsePageQuestionVO>("/question/search/page/vo", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    data: body,
+    ...(options || {}),
+  });
 }
 
-/** updateQuestion POST /api/question/update */
-export async function updateQuestionUsingPost(
+/** 此处后端没有提供注释 POST /question/update */
+export async function updateQuestion(
   body: API.QuestionUpdateRequest,
   options?: { [key: string]: any }
 ) {
-  return request<API.BaseResponseBoolean_>("/api/question/update", {
+  return request<API.BaseResponseBoolean>("/question/update", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

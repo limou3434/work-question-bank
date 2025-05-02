@@ -12,15 +12,15 @@ import "./page.css";
 /* 引入 */
 import React from "react";
 import {
-  listQuestionVoByPageUsingPost,
-  searchQuestionVoByPageUsingPost,
+  listQuestionVoByPage,
+  searchQuestionVoByPage,
 } from "@/api/questionController";
 import { message } from "antd";
 import QuestionTable from "@/components/QuestionTable";
 import Title from "antd/es/typography/Title";
 
 /* 定义 */
-// @ts-ignore
+
 export default async function QuestionsPage({ searchParams }) {
   // 获取到 url 中的查询参数
   const { q: searchText } = searchParams;
@@ -29,21 +29,21 @@ export default async function QuestionsPage({ searchParams }) {
   let questionList = [];
   let total = 0;
   try {
-    // const res = await listQuestionVoByPageUsingPost({
-    const res = await searchQuestionVoByPageUsingPost({
+    // const res = await listQuestionVoByPage({
+    const res = await searchQuestionVoByPage({
       title: searchText,
       pageSize: 12,
       // sortField: "createTime",
       sortField: "_score", // 引入了 ES 后修改为这个
       sortOrder: "desc",
     });
-    // @ts-ignore
+    
     questionList = res.data.records ?? [];
-    // @ts-ignore
+    
     total = res.data.total ?? 0;
   } catch (e) {
-    // @ts-ignore
-    message.error("获取题目列表失败: " + e.message);
+    
+    // message.error("获取题目列表失败: " + e.message);
   }
 
   // 组织页面

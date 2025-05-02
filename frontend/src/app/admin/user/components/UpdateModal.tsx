@@ -6,7 +6,7 @@
 /* 导入 */
 import { ProColumns, ProTable } from "@ant-design/pro-components";
 import React from "react";
-import { updateUserUsingPost } from "@/api/userController";
+import { updateUser } from "@/api/userController";
 import { message, Modal } from "antd";
 
 /* 属性 */
@@ -23,13 +23,13 @@ interface Props {
 const handleUpdate = async (fields: API.UserUpdateRequest) => {
   const hide = message.loading("正在更新");
   try {
-    await updateUserUsingPost(fields);
+    await updateUser(fields);
     hide();
     message.success("更新成功");
     return true;
   } catch (error: any) {
     hide();
-    message.error("更新失败: " + error.message);
+    // message.error("更新失败: " + error.message);
     return false;
   }
 };
