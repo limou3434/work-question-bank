@@ -46,10 +46,6 @@ public class QuestionBankQuestionController {
 
     /**
      * 创建题库题目关联表
-     *
-     * @param questionBankQuestionAddRequest
-     * @param request
-     * @return
      */
     @PostMapping("/add")
     public BaseResponse<Long> addQuestionBankQuestion(@RequestBody QuestionBankQuestionAddRequest questionBankQuestionAddRequest, HttpServletRequest request) {

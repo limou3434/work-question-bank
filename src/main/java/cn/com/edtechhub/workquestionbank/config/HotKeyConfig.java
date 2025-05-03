@@ -11,7 +11,6 @@ import org.springframework.context.annotation.Configuration;
  *
  * @author <a href="https://github.com/limou3434">limou3434</a>
  */
-// todo 取消注释开启 HotKey（须先配置 HotKey）
 @Configuration
 @ConfigurationProperties(prefix = "hotkey") // 表示配置文件(application.yml)中所有以 "hotkey." 开头的属性都会被映射到这个类的字段中
 @Data
@@ -25,7 +24,7 @@ public class HotKeyConfig {
     /**
      * 应用名称
      */
-    private String appName = "work-question-bank";
+    private String appName = "app";
 
     /**
      * 本地缓存最大数量

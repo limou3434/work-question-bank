@@ -22,6 +22,7 @@ export default function FirstQuestionPage({ params }) {
         async function fetchData() {
             try {
                 const bankRes = await getQuestionBankVoById({
+                    // @ts-ignore
                     id: questionBankId,
                     needQueryQuestionList: true,
                     pageSize: 200,

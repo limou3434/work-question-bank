@@ -166,7 +166,7 @@ nacos:
 
 ## 热点缓存
 hotkey:
-  app-name: work-question-bank
+  app-name: workquestionbank
   caffeine-size: 10000
   push-period: 1000
   etcd-server: http://127.0.0.1:2379

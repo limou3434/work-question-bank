@@ -23,6 +23,7 @@ import cn.com.edtechhub.workquestionbank.request.questionBank.QuestionBankUpdate
 import cn.com.edtechhub.workquestionbank.service.QuestionBankService;
 import cn.com.edtechhub.workquestionbank.service.QuestionService;
 import cn.com.edtechhub.workquestionbank.service.UserService;
+import com.jd.platform.hotkey.client.callback.JdHotKeyStore;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
@@ -139,19 +140,21 @@ public class QuestionBankController {
      */
     @GetMapping("/get/vo")
     public BaseResponse<QuestionBankVO> getQuestionBankVOById(QuestionBankQueryRequest questionBankQueryRequest, HttpServletRequest request) {
+        log.debug("{}", questionBankQueryRequest);
+
         ThrowUtils.throwIf(questionBankQueryRequest == null, ErrorCode.PARAMS_ERROR);
 
         Long id = questionBankQueryRequest.getId();
         ThrowUtils.throwIf(id <= 0, ErrorCode.PARAMS_ERROR);
 
-        // search cache
-//        String key = "bank_detail_" + id;
-//        if (JdHotKeyStore.isHotKey(key)) {
-//            Object cacheQuestionBankVO = JdHotKeyStore.get(key);
-//            if (cacheQuestionBankVO != null) {
-//                return ResultUtils.success((QuestionBankVO) cacheQuestionBankVO);
-//            }
-//        }
+        // 如果是热 key
+        String key = "bank_detail_" + id;
+        if (JdHotKeyStore.isHotKey(key)) {
+            Object cacheQuestionBankVO = JdHotKeyStore.get(key);
+            if (cacheQuestionBankVO != null) {
+                return ResultUtils.success((QuestionBankVO) cacheQuestionBankVO);
+            }
+        }
 
         // 查询数据库
         QuestionBank questionBank = questionBankService.getById(id);
@@ -170,7 +173,8 @@ public class QuestionBankController {
             questionBankVO.setQuestionPage(questionVOPage);
         }
 
-//        JdHotKeyStore.smartSet(key, questionBankVO); // set cache(But the key must be a hot key.)
+        // 设置本地缓存
+        JdHotKeyStore.smartSet(key, questionBankVO); // set cache(But the key must be a hot key.)
 
         // TODO: 可以只利用 JDHotKey 的探测功能，将查询数据库动作改为查询 Redis，这样就形成了多级缓存，而我们的 Redis 也可以做主动缓存
         // TODO: 可以降级运行
