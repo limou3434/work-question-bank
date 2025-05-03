@@ -1,102 +1,77 @@
-/**
- * src/app/bank/[questionBankId]/question/[questionId]/page.tsx
- * 开始刷题页面
- */
+"use client";
 
-/* 渲染 */
-"use server"; // 注释本行则默认服务端渲染
-
-/* 样式 */
 import "./page.css";
 import { getQuestionBankVoById } from "@/api/questionBankController";
-import Title from "antd/es/typography/Title";
-import { Flex, Menu, message } from "antd";
 import { getQuestionVoById } from "@/api/questionController";
+import Title from "antd/es/typography/Title";
+import { Flex, Menu, Spin } from "antd";
 import Sider from "antd/es/layout/Sider";
 import { Content } from "antd/es/layout/layout";
 import QuestionCard from "@/components/QuestionCard";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
-/* 定义 */
+export default function FirstQuestionPage({ params }) {
+    const { questionBankId, questionId } = params;
 
-export default async function FirstQuestionPage({ params }) {
-  const { questionBankId, questionId } = params;
+    const [bank, setBank] = useState(null);
+    const [question, setQuestion] = useState(null);
+    const [loading, setLoading] = useState(true);
 
-  // 获取题库
-  let bank = undefined;
-  try {
-    const res = await getQuestionBankVoById({
-      // @ts-ignore
-      id: questionBankId,
-      needQueryQuestionList: true,
-      pageSize: 200,
-    });
-    bank = res.data;
-  } catch (e) {
-    
-    console.error("获取题库失败: " + e.message);
-  }
+    useEffect(() => {
+        async function fetchData() {
+            try {
+                const bankRes = await getQuestionBankVoById({
+                    id: questionBankId,
+                    needQueryQuestionList: true,
+                    pageSize: 200,
+                });
+                setBank(bankRes.data);
+            } catch (e) {
+                console.error("获取题库失败:", e.message);
+            }
 
-  // 如果题库不存在
-  if (!bank) {
-    // TODO: 可以做错误边缘
-    return <div>题库不存在...</div>;
-  }
+            try {
+                const questionRes = await getQuestionVoById({
+                    id: questionId,
+                });
+                setQuestion(questionRes.data);
+            } catch (e) {
+                console.error("获取题目失败:", e.message);
+            }
 
-  // 获取首题
-  let question = undefined;
-  try {
-    const res = await getQuestionVoById({
-      id: questionId,
-    });
-    question = res.data;
-  } catch (e) {
-    
-    console.error("获取题目失败: " + e.message);
-  }
+            setLoading(false);
+        }
 
-  // 如果首题不存在
-  if (!question) {
-    // TODO: 可以做错误边缘
-    return <div>首题不存在...</div>;
-  }
+        fetchData();
+    }, [questionBankId, questionId]);
 
-  // 定义题目菜单列表
-  
-  const questionMenuItemList = (bank.questionPage?.records || []).map((q) => {
-    return {
-      key: q.id,
-      label: (
-        <Link href={`/bank/${questionBankId}/firstQuestion/${q.id}`}>
-          {q.title}
-        </Link>
-      ),
-    };
-  });
+    if (loading) return <Spin tip="加载中..." />;
+    if (!bank) return <div>题库不存在...</div>;
+    if (!question) return <div>首题不存在...</div>;
 
-  return (
-    <div id="firstQuestionPage" className="max-width-content">
-      <Flex gap={16}>
-        {/* 侧边栏目 */}
-        <Sider width={240} theme="light" style={{ padding: "24px 0" }}>
-          {/* 题库标题 */}
-          <Title level={4} style={{ padding: "0 20px" }}>
-            {/* @ts-ignore */}
-            {bank.title}
-          </Title>
-          {/* 菜单列表 */}
-          {/* @ts-ignore */}
-          <Menu items={questionMenuItemList} selectedKeys={[question.id]} />
-        </Sider>
-        {/* 内容区域 */}
-        <Content>
-          {/* @ts-ignore */}
-          <QuestionCard question={question} />
-        </Content>
-      </Flex>
-      {/* TODO: 支持默认隐藏答案 */}
-      {/* TODO: 支持未登陆无法查看答案 */}
-      {/* TODO: 支持下一题 */}
-    </div>
-  );
+    const questionMenuItemList = Array.isArray(bank?.questionPage?.records)
+        ? bank.questionPage.records.map((q) => ({
+            key: q.id,
+            label: (
+                <Link href={`/bank/${questionBankId}/firstQuestion/${q.id}`}>
+                    {q.title}
+                </Link>
+            ),
+        }))
+        : [];
+
+    return (
+        <div id="firstQuestionPage" className="max-width-content">
+            <Flex gap={16}>
+                <Sider width={240} theme="light" style={{ padding: "24px 0" }}>
+                    <Title level={4} style={{ padding: "0 20px" }}>{bank.title}</Title>
+                    <Menu items={questionMenuItemList} selectedKeys={[question.id]} />
+                </Sider>
+                <Content>
+                    <QuestionCard question={question} />
+                </Content>
+            </Flex>
+        </div>
+    );
 }

@@ -201,14 +201,14 @@
             <version>3.21.0</version>
         </dependency>
 
-<!--        &lt;!&ndash; Hotkey: https://gitee.com/jd-platform-opensource/hotkey &ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <artifactId>hotkey-client</artifactId>-->
-<!--            <groupId>com.jd.platform.hotkey</groupId>-->
-<!--            <version>0.0.4-SNAPSHOT</version>-->
-<!--            <scope>system</scope>-->
-<!--            <systemPath>${project.basedir}/lib/hotkey-client-0.0.4-SNAPSHOT.jar</systemPath>-->
-<!--        </dependency>-->
+        <!-- Hotkey: https://gitee.com/jd-platform-opensource/hotkey -->
+        <dependency>
+            <artifactId>hotkey-client</artifactId>
+            <groupId>com.jd.platform.hotkey</groupId>
+            <version>0.0.4-SNAPSHOT</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/hotkey-client-0.0.4-SNAPSHOT-jar-with-dependencies.jar</systemPath>
+        </dependency>
 
     </dependencies>
 

@@ -166,10 +166,10 @@ public class QuestionController {
     public BaseResponse<QuestionVO> getQuestionVOById(long id, HttpServletRequest request) {
         ThrowUtils.throwIf(id <= 0, ErrorCode.PARAMS_ERROR);
         // 检测和处置爬虫（可以自行扩展为 - 登录后才能获取到答案）
-        User loginUser = userService.getLoginUserPermitNull(request);
-        if (loginUser != null) {
-            crawlerDetect(loginUser.getId());
-        }
+//        User loginUser = userService.getLoginUserPermitNull(request);
+//        if (loginUser != null) {
+//            crawlerDetect(loginUser.getId());
+//        }
         // 友情提示，对于敏感的内容，可以再打印一些日志，记录用户访问的内容
         // 查询数据库
         Question question = questionService.getById(id);

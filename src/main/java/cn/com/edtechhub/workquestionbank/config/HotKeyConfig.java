@@ -1,6 +1,6 @@
 package cn.com.edtechhub.workquestionbank.config;
 
-//import com.jd.platform.hotkey.client.ClientStarter;
+import com.jd.platform.hotkey.client.ClientStarter;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Configuration;
  * hotkey 热 key 发现配置
  *
  * @author <a href="https://github.com/limou3434">limou3434</a>
- * @from <a href="https://datalearnhub.com">大数据工作室</a>
  */
 // todo 取消注释开启 HotKey（须先配置 HotKey）
 @Configuration
@@ -26,7 +25,7 @@ public class HotKeyConfig {
     /**
      * 应用名称
      */
-    private String appName = "work-intelligent-interview";
+    private String appName = "work-question-bank";
 
     /**
      * 本地缓存最大数量
@@ -43,13 +42,13 @@ public class HotKeyConfig {
      */
     @Bean
     public void initHotkey() {
-//        ClientStarter.Builder builder = new ClientStarter.Builder();
-//        ClientStarter starter = builder.setAppName(appName)
-//                .setCaffeineSize(caffeineSize)
-//                .setPushPeriod(pushPeriod)
-//                .setEtcdServer(etcdServer)
-//                .build();
-//        starter.startPipeline();
+        ClientStarter.Builder builder = new ClientStarter.Builder();
+        ClientStarter starter = builder.setAppName(appName)
+                .setCaffeineSize(caffeineSize)
+                .setPushPeriod(pushPeriod)
+                .setEtcdServer(etcdServer)
+                .build();
+        starter.startPipeline();
     }
 
 }
